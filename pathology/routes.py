@@ -31,20 +31,22 @@ if not os.path.isfile('pathology/database.db'):
 
 def update_repo():
 	# updating the database on github repo
+	print('updating repo ...')
 	with open('pathology/database.db', 'rb') as file:
 		new_content = file.read()
 	sha_replaced = repo.get_contents('pathology/database.db').sha
 	repo.update_file('pathology/database.db', 'data added', new_content, sha_replaced)
+	print('done.')
 
 def addIds(html):
-	# add ids to h1, h2, h3 tags for internal links
+	# add ids to h1, h2, h3, h4 tags for internal links
 	soup = BeautifulSoup(html, 'html.parser')
-	selector = 'h1, h2, h3'
+	selector = 'h1, h2, h3, h4'
 	headings = soup.select(selector)
 	print(headings)
 	for heading in headings:
 		heading['id'] = heading.get_text().strip().replace(' ', '_').lower()
-	return soup.prettify()
+	return str(soup)
 
 @pathology.route('/')
 def index():
@@ -110,7 +112,7 @@ def articles():
 		qstring = flask.request.args['q']
 	else: qstring = ''
 	
-	items_per_page = 1
+	items_per_page = 10
 	articles = Article.select().where(
 		Article.title.contains(qstring) |
 		Article.subtitle.contains(qstring) |
