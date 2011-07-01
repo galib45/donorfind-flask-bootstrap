@@ -100,6 +100,17 @@ def edit(id):
 	else:
 		return flask.redirect(flask.url_for('.index'))
 
+@pathology.route('/json')
+def json():
+	articles = Article.select().order_by(Article.id.desc())
+	articles_list = []
+	for article in articles:
+		article_dict = article.__dict__['__data__']
+		article_dict['date_created'] = article_dict['date_created'].strftime('%B %d, %Y %I:%M %p')
+		article_dict['text'] = BeautifulSoup(article_dict['content'], 'html.parser').get_text()
+		articles_list.append(article_dict)
+	data = {'articles': articles_list}
+	return flask.jsonify(data)
 
 @pathology.route('/articles')
 def articles():
