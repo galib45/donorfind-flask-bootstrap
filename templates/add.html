@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% set active_page = 'add' %}
+
+{% block title %}Add Information{% endblock %}
+
+{% block style %}
+.container {
+	padding: 10px;
+}
+form {
+	padding: 10px;
+}
+{% endblock %}
+
+{% block content %}
+	<div class="container">
+		<center><h2>Add Donor Information</h2></center>
+		<form method="POST">
+			<div class="form-group row">
+				<label for="name" class="col-sm-2 col-form-label">Name</label>
+				<div class="col-sm-9">
+					<input type="text" name="name" class="form-control" placeholder="Name of the donor" required>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label for="contact_no" class="col-sm-2 col-form-label">Contact No</label>
+				<div class="input-group mb-0 col-sm-9">
+					<div class="input-group-prepend">
+						<span class="input-group-text">+880</span>
+					</div>
+					<input type="text" name="contact_no" id="contact_no "class="form-control" placeholder="Enter the phone number" required>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label for="blood_group" class="col-sm-2 col-form-label">Blood Group</label>
+				<div class="col-sm-9">
+					<select name="blood_group" class="form-control" required>
+						<option value="" selected>Choose your blood group</option>
+						<option value="A(+ve)">A (+ve)</option>
+						<option value="A(-ve)">A (-ve)</option>
+						<option value="B(+ve)">B (+ve)</option>
+						<option value="B(-ve)">B (-ve)</option>
+						<option value="AB(+ve)">AB (+ve)</option>
+						<option value="AB(-ve)">AB (-ve)</option>
+						<option value="O(+ve)">O (+ve)</option>
+						<option value="O(-ve)">O (-ve)</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label for="remarks" class="col-sm-2 col-form-label">Remarks</label>
+				<div class="col-sm-9">
+					<select name="remarks" class="form-control" required>
+						<option value="No problem" selected>No problem</option>
+						<option value="Anemia">Anemia</option>
+						<option value="Underweight">Underweight</option>
+						<option value="Prohibited by family">Prohibited by family</option>
+					</select>
+				</div>
+			</div>
+			<br>
+			<div class="form-group row">
+				<input type="submit" value="Add" class="btn btn-outline-primary ml-3">
+			</div>
+		</form>
+	</div>
+{% endblock %}
+
+{% block script %}{% endblock %}

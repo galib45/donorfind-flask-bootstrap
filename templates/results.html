@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% set active_page = 'search' %}
+
+{% block title %}Search Results{% endblock %}
+
+{% block style %}
+.container {
+	padding: 10px;
+}
+
+td {
+	font-size: 10px;
+}
+
+th, td {
+	text-align: center;
+}
+{% endblock %}
+
+{% block content %}
+	<div class="container">
+		<center><h2>Search Results for {{ qstring }}</h2></center>
+		<div class="table-responsive">
+			<table class="table table-striped table-hover">
+				<thead class="thead-dark">
+					<tr>
+						<th scope="col">Name</th>
+						<th scope="col">Contact No</th>
+						<th scope="col">Blood group</th>
+						<th scope="col">Remarks</th>
+					<tr>
+				</thead>
+				<tbody>
+					{% for index in indexes %}
+						<tr>
+							{% for i in range(4) %}
+								<td>{{ db[index][i] }}</td>
+							{% endfor %}
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% set active_page = 'search' %}
+
+{% block title %}Search Information{% endblock %}
+
+{% block style %}
+.container {
+	padding: 10px;
+}
+form {
+	padding: 10px;
+}
+{% endblock %}
+
+{% block content %}
+	<div class="container">
+		<center><h2>Search Donor Information</h2></center>
+		<form method="post">
+			<div class="form-group row">
+				<label for="qstring" class="col-sm-2 col-form-label">Keyword</label>
+				<div class="col-sm-9">
+					<input type="text" name="qstring" class="form-control" placeholder="Blood group/Name/Phone number" required>
+				</div>
+			</div>
+			<br>
+			<div class="form-group row">
+				<input type="submit" value="Search" class="btn btn-outline-primary ml-3">
+			</div>
+		</form>
+	</div>
+{% endblock %}
