@@ -6,5 +6,6 @@ Werkzeug==0.14.1
 gunicorn==19.9.0
 Deprecated==1.2.4
 PyGithub==1.43.3
-requests==2.19.1
+requests==2.20.1
 wrapt==1.10.11
+PyJWT==1.6.4
