@@ -27,14 +27,13 @@ th, td {
 						<th scope="col">Name</th>
 						<th scope="col">Contact No</th>
 						<th scope="col">Blood group</th>
-						<th scope="col">Remarks</th>
 					<tr>
 				</thead>
 				<tbody>
-					{% for index in indexes %}
+					{% for row in data %}
 						<tr>
-							{% for i in range(4) %}
-								<td>{{ db[index][i] }}</td>
+							{% for col in row %}
+								<td>{{ col }}</td>
 							{% endfor %}
 						</tr>
 					{% endfor %}
