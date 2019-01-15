@@ -47,12 +47,14 @@ def add():
 @app.route('/search', methods=['GET', 'POST'])
 def search():
 	if flask.request.method == 'GET':
+		if 'q' in flask.request.args:
+			qstring = flask.request.args['q']
+			data = db.search_data(qstring)
+			return flask.render_template('results.html', qstring=qstring, data=data)
 		return flask.render_template('search.html')
 	else:
 		qstring = flask.request.form['qstring']
-		data = db.search_data(qstring)
+		return flask.redirect(flask.url_for('search', q=qstring))
 
-		return flask.render_template('results.html', qstring=qstring, data=data)
-		
 if __name__=='__main__':
 	app.run()

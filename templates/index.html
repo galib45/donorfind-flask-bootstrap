@@ -25,7 +25,7 @@
 				<tbody>
 					{% for data in data[1:] %}
 					<tr>
-						<td>{{ data[0] }}</td>
+						<td><a href="{{ url_for('search', q=data[0]) }}">{{ data[0] }}</a></td>
 						<td>{{ data[1] }} entries</td>
 					</tr>
 					{% endfor %}
