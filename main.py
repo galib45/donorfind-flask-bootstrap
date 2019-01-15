@@ -5,17 +5,21 @@ import database
 import db_helper
 from github import Github
 
+# initialize the github repository of the database
 user = Github('galib45', 'ribosome80S').get_user()
 repo = user.get_repo('galib-cloud')
 database_file = repo.get_contents('database.db')
 
+# download database if not found
 if not os.path.isfile('database.db'):
 	file_content = database_file.decoded_content
 	with open('database.db', 'wb') as file:
 		file.write(file_content)
 
+# initialize the database
 db = database.Database()
 
+# initialize the app
 app = flask.Flask(__name__)
 
 @app.route('/')
