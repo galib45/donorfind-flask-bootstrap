@@ -22,6 +22,7 @@ db = database.Database()
 # initialize the app
 app = flask.Flask(__name__)
 
+# routing commands
 @app.route('/')
 def index():
 	stat = db.statistics()
