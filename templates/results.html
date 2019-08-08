@@ -8,26 +8,32 @@
 	padding: 10px;
 }
 
-td {
-	
+.table thead th{
+	vertical-align: middle;
+	text-align: center;
 }
 
-th, td {
+.table tbody td {
+	vertical-align: middle;
 	text-align: center;
+}
+
+tbody tr td:nth-child(1) {
+	text-align: left;
 }
 {% endblock %}
 
 {% block content %}
 	<div class="container">
-		<center><h2>Search Results for {{ qstring }}</h2></center>
+		<center><h2>Search Results for "{{ qstring }}"</h2></center>
 		<div class="table-responsive">
 			<table class="table table-striped table-hover">
-				<thead class="thead-dark">
+				<thead>
 					<tr>
-						<th scope="col">Name</th>
-						<th scope="col">Contact No</th>
-						<th scope="col">Blood group</th>
-					<tr>
+						<th scope="col" >Name</th>
+						<th scope="col" >Contact No</th>
+						<th scope="col" >Blood group</th>
+					</tr>
 				</thead>
 				<tbody>
 					{% for row in data %}

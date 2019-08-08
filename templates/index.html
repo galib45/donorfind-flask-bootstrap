@@ -7,6 +7,10 @@
 .container {
 	text-align: center;
 }
+
+p {
+	margin: 0;
+}
 {% endblock %}
 
 {% block content %}
@@ -16,17 +20,17 @@
 		<br>
 		<div class="table-responsive">
 			<table class="table table-striped table-hover">
-				<thead class="thead-dark">
+				<thead>
 					<tr>
 						<th scope="col">{{ data[0][0] }}</th>
-						<th scope="col">{{ data[0][1] }} entries</th>
+						<th scope="col">{{ data[0][1] }} {{ 'entry' if data[0][1]==1 else 'entries'}}</th>
 					</tr>
 				</thead>
 				<tbody>
 					{% for data in data[1:] %}
 					<tr>
 						<td><a href="{{ url_for('search', q=data[0]) }}">{{ data[0] }}</a></td>
-						<td>{{ data[1] }} entries</td>
+						<td>{{ data[1] }} {{ 'entry' if data[1]==1 else 'entries'}}</td>
 					</tr>
 					{% endfor %}
 				</tbody>
