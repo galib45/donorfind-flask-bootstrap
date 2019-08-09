@@ -7,34 +7,31 @@
 .container {
 	padding: 10px;
 }
-
-.table thead th{
-	vertical-align: middle;
-	text-align: center;
+.btn-link {
+	padding: 0;
+	width: 100%;
 }
 
-.table tbody td {
-	vertical-align: middle;
-	text-align: center;
+.btn-link:hover, .btn-link:focus{
+	text-decoration: none;
+	color: #d50000
 }
-
-tbody tr td:nth-child(1) {
-	text-align: left;
-}
-
 {% endblock %}
 
 {% block content %}
-	<div class="container">
+	<div class="container" id="accordion">
 		<center>
 			<h2 class="mb-4">Search Results for "{{ qstring }}"</h2>
 		</center>
 		{% for row in data %}
 			<div class="card mx-auto">
-				<div class="card-header px-3 py-2">
-					{{ row[0] }}
+				<div class="card-header px-3 py-2" id="h{{ data.index(row) }}">
+					<button class="btn btn-link text-left" data-toggle="collapse" data-target="#d{{ data.index(row) }}" aria-expanded="false" aria-controls="{{ data.index(row) }}">
+						<b>{{ row[0] }}</b>
+					</button>
 				</div>
-				<div class="card-body px-3 py-3">
+				<div class="collapse" id="d{{ data.index(row) }}" aria-labelledby="h{{ data.index(row) }}" data-parent="#accordion">
+					<div class="card-body px-3 py-3">
 					<div class="row">
 						<div class="col">
 							Contact No<br>
@@ -44,6 +41,7 @@ tbody tr td:nth-child(1) {
 							{{ row[1] }}<br>
 							{{ row[2] }}
 						</div>
+					</div>
 					</div>
 				</div>
 			</div>
