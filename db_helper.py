@@ -32,8 +32,11 @@ def query(qstring, cur):
 	return data
 
 def add_to_db(data, cur):
-	name, contact_no, blood_group = data
+	name, contact_no, batch, blood_group = data
 	name = name.upper()
+
+	# formatting contact no
+	contact_no = '0' + ''.join([c for c in contact_no if c.isdigit()])[-10:]
 
 	# formatting blood group
 	replacements = [
@@ -47,22 +50,28 @@ def add_to_db(data, cur):
 		('-', '(-VE)')
 	]
 	blood_group = blood_group.upper()
+
+	# formatting batch 
+	batch = int(''.join([c for c in batch if c.isdigit()]))
+
 	for replacement in replacements:
 		blood_group = blood_group.replace(replacement[0], replacement[1])
+
+	#print(name, contact_no, batch, blood_group)
 
 	if len(query(name, cur)) or len(query(contact_no, cur)):
 		cur.execute(
 			'''UPDATE donor
-			SET name = ?, contact_no = ?, blood_group = ?
+			SET name = ?, contact_no = ?, batch = ?, blood_group = ?
 			WHERE name = ? OR contact_no = ?
 			''',
-			(name, contact_no, blood_group, name, contact_no)
-			)
+			(name, contact_no, batch, blood_group, name, contact_no)
+		)
 	else:
 		cur.execute(
-			"INSERT INTO donor VALUES (?, ?, ?)",
-			(name, contact_no, blood_group)
-			)
+			"INSERT INTO donor VALUES (?, ?, ?, ?)",
+			(name, contact_no, batch, blood_group)
+		)
 
 def statistics(cur):
 	stat = []
