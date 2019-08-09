@@ -20,19 +20,11 @@
 	.container-fluid {
 		padding: 0;
 		font-family: Roboto;
+		letter-spacing: -0.35px;
 		
 		min-height: 100%;
 		display: flex;
 		flex-direction: column;
-	}
-
-	footer {
-		margin-top: auto;
-	}
-
-	footer .container {
-		text-align: left;
-		padding: 10px 30px;
 	}
 
 	nav, footer, thead {
@@ -59,11 +51,17 @@
     	.table-responsive {
     		padding: 5px 0px;
 		}
+		.card {
+			width: 90%;
+		}
 	}
 
 	@media only screen and (min-width: 576px) {
     	.table-responsive {
     		padding: 5px 10px;
+		}
+		.card {
+			width: 70%;
 		}
 	}
 
@@ -71,11 +69,17 @@
     	.table-responsive {
     		padding: 5px 67px;
 		}
+		.card {
+			width: 60%;
+		}
 	}
 
 	@media only screen and (min-width: 992px) {
     	.table-responsive {
     		padding: 5px 170px;
+		}
+		.card {
+			width: 50%;
 		}
 	}
 
@@ -92,15 +96,15 @@
 <body>
 	<div class="container-fluid">
 		<!-- Navigation Bar -->
-		<nav class="navbar navbar-expand-sm navbar-dark">
+		<nav class="navbar navbar-expand-sm navbar-dark px-3 px-sm-3 px-md-4 px-lg-5">
 			<a class="navbar-brand" href="/">
-				<img src="{{ url_for('static', filename='logo.jpg') }}" width="30" height="30" class="d-inline-block align-top" alt="">
+				<img class="mx-2" src="{{ url_for('static', filename='logo.jpg') }}" width="30" height="30" class="d-inline-block align-top" alt="">
 				DonorFind
 			</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 				<i class="large material-icons">menu</i>
 			</button>
-			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<div class="collapse navbar-collapse px-2" id="navbarSupportedContent">
 				<div class="navbar-nav">
 					<a class="nav-item nav-link {{ 'active' if active_page=='home' else ''}}" href="/">Home</a>
 					<a class="nav-item nav-link {{ 'active' if active_page=='add' else ''}}" href="/add">Add</a>
@@ -112,8 +116,8 @@
 		{% block content %}{% endblock %}
 
 		<!-- Footer -->
-		<footer class="footer">
-			<div class="container">
+		<footer class="footer mt-auto">
+			<div class="container text-left px-3 px-sm-3 px-md-4 px-lg-5 py-3">
 				Developed and Maintained By<br>Asadul Al Galib (SS-45)
 			</div>
 		</footer>
