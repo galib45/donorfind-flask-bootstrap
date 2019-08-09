@@ -27,7 +27,7 @@
 			<div class="card mx-auto">
 				<div class="card-header px-3 py-2" id="h{{ data.index(row) }}">
 					<button class="btn btn-link text-left" data-toggle="collapse" data-target="#d{{ data.index(row) }}" aria-expanded="false" aria-controls="{{ data.index(row) }}">
-						<b>{{ row[0] }}</b>
+						{{ row[0] }}
 					</button>
 				</div>
 				<div class="collapse" id="d{{ data.index(row) }}" aria-labelledby="h{{ data.index(row) }}" data-parent="#accordion">
