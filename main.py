@@ -59,4 +59,4 @@ def search():
 		return flask.redirect(flask.url_for('search', q=qstring))
 
 if __name__=='__main__':
-	app.run()
+	app.run(debug=True)
