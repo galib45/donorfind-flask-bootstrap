@@ -42,7 +42,8 @@ def add():
 		db.add_data((name, contact_no, batch, blood_group))
 		with open('database.db', 'rb') as file:
 			new_content = file.read()
-		repo.update_file('database.db', 'data added', new_content, database_file.sha)
+		sha_replaced = repo.get_contents('database.db').sha
+		repo.update_file('database.db', 'data added', new_content, sha_replaced)
 
 		return flask.redirect(flask.url_for('index'))
 
@@ -59,4 +60,4 @@ def search():
 		return flask.redirect(flask.url_for('search', q=qstring))
 
 if __name__=='__main__':
-	app.run(debug=True)
+	app.run()
