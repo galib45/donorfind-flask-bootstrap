@@ -59,5 +59,9 @@ def search():
 		qstring = flask.request.form['qstring']
 		return flask.redirect(flask.url_for('search', q=qstring))
 
+@app.route('/file/<path:pathOftheFile>')
+def send_file(pathOftheFile):
+	return flask.send_from_directory('', pathOftheFile)
+
 if __name__=='__main__':
 	app.run()
