@@ -21,12 +21,12 @@
 {% block content %}
 	<div class="container" id="accordion">
 		<center>
-			<h2 class="mb-4">Search Results for "{{ qstring }}"</h2>
+			<h2 class="mb-4">{{ data|length }} Search Results for "{{ qstring }}"</h2>
 		</center>
 		{% for row in data %}
 			<div class="card mx-auto">
-				<div class="card-header px-3 py-2" id="h{{ data.index(row) }}">
-					<button class="btn btn-link text-left" data-toggle="collapse" data-target="#d{{ data.index(row) }}" aria-expanded="false" aria-controls="{{ data.index(row) }}">
+				<div class="card-header p-0" id="h{{ data.index(row) }}">
+					<button class="btn btn-link text-left px-3 py-2" data-toggle="collapse" data-target="#d{{ data.index(row) }}" aria-expanded="false" aria-controls="{{ data.index(row) }}">
 						{{ row[0] }}
 					</button>
 				</div>
