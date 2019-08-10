@@ -21,7 +21,7 @@
 {% block content %}
 	<div class="container" id="accordion">
 		<center>
-			<h2 class="mb-4">{{ data|length }} Search Results for "{{ qstring }}"</h2>
+			<h2 class="mb-4">{{ data|length }} Search Result{{ 's' if data|length>1 }} for "{{ qstring }}"</h2>
 		</center>
 		{% for row in data %}
 			<div class="card mx-auto">

@@ -4,29 +4,43 @@ import operator as op
 def query(qstring, cur):
 	# check if searching with blood group
 	query_string = qstring.upper().replace('POSITIVE', '+').replace('NEGATIVE', '-')
-
-	if '+' in query_string or '-' in query_string:
-		query_string = query_string.replace(' ', '').replace('(', '')
-		query_string = query_string.replace(')', '').replace('VE', '')
-		query_string = query_string.replace('+', '(+VE)')
-		query_string = query_string.replace('-', '(-VE)')
-
+	num_length = len(extract_num(query_string))
+	
+	if num_length<=2 and num_length>0:
+		query_string = extract_num(query_string)
+		# search by batch
 		data = cur.execute(
 			'''SELECT * FROM donor WHERE 
-			blood_group=?
+			batch=?
 			ORDER BY name ASC
 			''', 
 			(query_string,)
 			).fetchall() 
 	else:
-		query_string = '%' + query_string + '%'
-		data = cur.execute(
-			'''SELECT * FROM donor WHERE 
-			name LIKE ? OR
-			contact_no LIKE ?
-			ORDER BY name ASC
-			''', 
-			(query_string, query_string)
+		if '+' in query_string or '-' in query_string:
+			query_string = query_string.replace(' ', '').replace('(', '')
+			query_string = query_string.replace(')', '').replace('VE', '')
+			query_string = query_string.replace('+', '(+VE)')
+			query_string = query_string.replace('-', '(-VE)')
+
+			# search by blood group
+			data = cur.execute(
+				'''SELECT * FROM donor WHERE 
+				blood_group=?
+				ORDER BY name ASC
+				''', 
+				(query_string,)
+			).fetchall() 
+		else:
+			query_string = '%' + query_string + '%'
+			# search by name or contact no
+			data = cur.execute(
+				'''SELECT * FROM donor WHERE 
+				name LIKE ? OR
+				contact_no LIKE ?
+				ORDER BY name ASC
+				''', 
+				(query_string, query_string)
 			).fetchall()
 	
 	return data
@@ -36,7 +50,7 @@ def add_to_db(data, cur):
 	name = name.upper()
 
 	# formatting contact no
-	contact_no = '0' + ''.join([c for c in contact_no if c.isdigit()])[-10:]
+	contact_no = '0' + extract_num(contact_no)[-10:]
 
 	# formatting blood group
 	replacements = [
@@ -52,7 +66,7 @@ def add_to_db(data, cur):
 	blood_group = blood_group.upper()
 
 	# formatting batch 
-	batch = int(''.join([c for c in batch if c.isdigit()]))
+	batch = int(extract_num(batch))
 
 	for replacement in replacements:
 		blood_group = blood_group.replace(replacement[0], replacement[1])
@@ -84,6 +98,9 @@ def statistics(cur):
 
 	stat = sorted(stat, key=op.itemgetter(1), reverse=True)
 	return stat
+
+def extract_num(value):
+	return ''.join([c for c in value if c.isdigit()])
 
 def main():
 	conn = lite.connect('database.db')
