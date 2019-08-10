@@ -7,7 +7,9 @@ def query(qstring, cur):
 	num_length = len(extract_num(query_string))
 	
 	if num_length<=2 and num_length>0:
-		query_string = extract_num(query_string)
+		if 'D' in query_string.upper(): 
+			query_string = 'D-' + extract_num(query_string)
+		else: query_string = 'SS-' + extract_num(query_string)
 		# search by batch
 		data = cur.execute(
 			'''SELECT * FROM donor WHERE 
@@ -46,11 +48,14 @@ def query(qstring, cur):
 	return data
 
 def add_to_db(data, cur):
-	name, contact_no, batch, blood_group = data
+	name, contact_no, batch_type, batch, blood_group = data
 	name = name.upper()
 
 	# formatting contact no
 	contact_no = '0' + extract_num(contact_no)[-10:]
+
+	# formatting batch
+	batch = batch_type + '-' + extract_num(batch)
 
 	# formatting blood group
 	replacements = [
@@ -65,13 +70,10 @@ def add_to_db(data, cur):
 	]
 	blood_group = blood_group.upper()
 
-	# formatting batch 
-	batch = int(extract_num(batch))
-
 	for replacement in replacements:
 		blood_group = blood_group.replace(replacement[0], replacement[1])
 
-	#print(name, contact_no, batch, blood_group)
+	print(name, contact_no, batch, blood_group)
 
 	if len(query(name, cur)) or len(query(contact_no, cur)):
 		cur.execute(

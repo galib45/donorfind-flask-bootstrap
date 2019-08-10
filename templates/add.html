@@ -10,6 +10,7 @@
 form {
 	padding: 10px;
 }
+
 {% endblock %}
 
 {% block content %}
@@ -35,10 +36,13 @@ form {
 			</div>
 			<div class="form-group row">
 				<div class="col-0 col-sm-0 col-md-1"></div>
-				<label for="contact_no" class="col-4 col-sm-3 col-md-2 col-form-label text-left text-sm-right">Batch</label>
+				<label for="batch" class="col-4 col-sm-3 col-md-2 col-form-label text-left text-sm-right">Batch</label>
 				<div class="input-group mb-0 col-12 col-sm-8 col-md-7">
 					<div class="input-group-prepend">
-						<span class="input-group-text">SS</span>
+						<select id="batch_type" name="batch_type" class="form-control" required>
+							<option value="SS" selected>MBBS</option>
+							<option value="D">BDS</option>
+						</select>
 					</div>
 					<input type="text" name="batch" id="batch"class="form-control" placeholder="Enter the batch e.g. 45" required>
 				</div>

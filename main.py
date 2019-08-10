@@ -36,10 +36,11 @@ def add():
 		form = flask.request.form
 		name = form['name']
 		contact_no = form['contact_no']
+		batch_type = form['batch_type']
 		batch = form['batch']
 		blood_group = form['blood_group']
 		
-		db.add_data((name, contact_no, batch, blood_group))
+		db.add_data((name, contact_no, batch_type, batch, blood_group))
 		with open('database.db', 'rb') as file:
 			new_content = file.read()
 		sha_replaced = repo.get_contents('database.db').sha
