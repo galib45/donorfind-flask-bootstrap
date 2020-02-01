@@ -1,4 +1,3 @@
-#import sys
 import flask
 from donorfind.routes import donorfind
 
