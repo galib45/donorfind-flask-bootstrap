@@ -1,8 +1,8 @@
 import sqlite3 as lite
-import db_helper
+from . import db_helper
 
 class Database:
-	def __init__(self, filename='database.db'):
+	def __init__(self, filename='donorfind/database.db'):
 		self.connection = lite.connect(filename, check_same_thread=False)
 		self.cursor = self.connection.cursor()
 		

@@ -29,7 +29,7 @@ p {
 				<tbody>
 					{% for data in data[1:] %}
 					<tr>
-						<td><a href="{{ url_for('search', q=data[0]) }}">{{ data[0] }}</a></td>
+						<td><a href="{{ url_for('donorfind.search', q=data[0]) }}">{{ data[0] }}</a></td>
 						<td>{{ data[1] }} {{ 'entry' if data[1]==1 else 'entries'}}</td>
 					</tr>
 					{% endfor %}
