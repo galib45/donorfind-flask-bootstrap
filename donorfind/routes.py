@@ -9,7 +9,8 @@ donorfind = flask.Blueprint(
 				'donorfind', 
 				__name__, 
 				template_folder='templates', 
-				static_folder='static'
+				static_folder='static',
+				url_prefix = '/donorfind'
 			)
 
 # initialize the github repository of the database
@@ -50,7 +51,7 @@ def add():
 		sha_replaced = repo.get_contents('database.db').sha
 		repo.update_file('database.db', 'data added', new_content, sha_replaced)
 
-		return flask.redirect(flask.url_for('index'))
+		return flask.redirect(flask.url_for('.index'))
 
 @donorfind.route('/search', methods=['GET', 'POST'])
 def search():
@@ -62,7 +63,7 @@ def search():
 		return flask.render_template('search.html')
 	else:
 		qstring = flask.request.form['qstring']
-		return flask.redirect(flask.url_for('search', q=qstring))
+		return flask.redirect(flask.url_for('.search', q=qstring))
 
 @donorfind.route('/file/<path:pathOftheFile>')
 def send_file(pathOftheFile):
