@@ -8,54 +8,59 @@
 
 
 <url>
-  <loc>http://galib45.herokuapp.com/donorfind/</loc>
-  <lastmod>2020-02-01T09:35:08+00:00</lastmod>
+  <loc>http://galib45.herokuapp.com/</loc>
+  <lastmod>2020-02-03T15:23:24+00:00</lastmod>
   <priority>1.00</priority>
 </url>
 <url>
-  <loc>http://galib45.herokuapp.com/donorfind/add</loc>
-  <lastmod>2020-02-01T09:35:08+00:00</lastmod>
+  <loc>http://galib45.herokuapp.com/donorfind/</loc>
+  <lastmod>2020-02-03T15:23:24+00:00</lastmod>
   <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://galib45.herokuapp.com/donorfind/add</loc>
+  <lastmod>2020-02-03T15:23:24+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
   <loc>http://galib45.herokuapp.com/donorfind/search</loc>
-  <lastmod>2020-02-01T09:35:08+00:00</lastmod>
-  <priority>0.80</priority>
+  <lastmod>2020-02-03T15:23:24+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
   <loc>http://galib45.herokuapp.com/donorfind/search?q=O%28%2BVE%29</loc>
-  <lastmod>2020-02-01T09:35:08+00:00</lastmod>
-  <priority>0.80</priority>
+  <lastmod>2020-02-03T15:23:24+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
   <loc>http://galib45.herokuapp.com/donorfind/search?q=A%28%2BVE%29</loc>
-  <lastmod>2020-02-01T09:35:08+00:00</lastmod>
-  <priority>0.80</priority>
+  <lastmod>2020-02-03T15:23:24+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
   <loc>http://galib45.herokuapp.com/donorfind/search?q=B%28%2BVE%29</loc>
-  <lastmod>2020-02-01T09:35:08+00:00</lastmod>
-  <priority>0.80</priority>
+  <lastmod>2020-02-03T15:23:24+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
   <loc>http://galib45.herokuapp.com/donorfind/search?q=AB%28%2BVE%29</loc>
-  <lastmod>2020-02-01T09:35:08+00:00</lastmod>
-  <priority>0.80</priority>
+  <lastmod>2020-02-03T15:23:24+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
   <loc>http://galib45.herokuapp.com/donorfind/search?q=B%28-VE%29</loc>
-  <lastmod>2020-02-01T09:35:08+00:00</lastmod>
-  <priority>0.80</priority>
+  <lastmod>2020-02-03T15:23:24+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
   <loc>http://galib45.herokuapp.com/donorfind/search?q=O%28-VE%29</loc>
-  <lastmod>2020-02-01T09:35:08+00:00</lastmod>
-  <priority>0.80</priority>
+  <lastmod>2020-02-03T15:23:24+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 <url>
   <loc>http://galib45.herokuapp.com/donorfind/search?q=A%28-VE%29</loc>
-  <lastmod>2020-02-01T09:35:08+00:00</lastmod>
-  <priority>0.80</priority>
+  <lastmod>2020-02-03T15:23:24+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 
 
