@@ -25,12 +25,12 @@
 		</center>
 		{% for row in data %}
 			<div class="card mx-auto">
-				<div class="card-header p-0" id="h{{ data.index(row) }}">
-					<button class="btn btn-link text-left px-3 py-2" data-toggle="collapse" data-target="#d{{ data.index(row) }}" aria-expanded="false" aria-controls="{{ data.index(row) }}">
-						{{ row[0] }}
+				<div class="card-header p-0" id="h{{ loop.index }}">
+					<button class="btn btn-link text-left px-3 py-2" data-toggle="collapse" data-target="#d{{ loop.index }}" aria-expanded="false" aria-controls="{{ loop.index }}">
+						{{ row.name }}
 					</button>
 				</div>
-				<div class="collapse" id="d{{ data.index(row) }}" aria-labelledby="h{{ data.index(row) }}" data-parent="#accordion">
+				<div class="collapse" id="d{{ loop.index }}" aria-labelledby="h{{ loop.index }}" data-parent="#accordion">
 					<div class="card-body px-3 py-3">
 					<div class="row">
 						<div class="col">
@@ -39,9 +39,9 @@
 							Blood group
 						</div>
 						<div class="col">
-							{{ row[1] }}<br>
-							{{ row[2] }}<br>
-							{{ row[3] }}
+							{{ row.phone }}<br>
+							{{ row.batch }}<br>
+							{{ row.blood_group }}
 						</div>
 					</div>
 					</div>
