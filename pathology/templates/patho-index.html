@@ -1,0 +1,55 @@
+{% extends "patho-base.html" %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+  <!-- Page Header -->
+  <header class="masthead" style="background-image: url('{{ url_for('pathology.static', filename='img/home-bg.jpg') }}')">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="site-heading">
+            <h1>Pathology Simplified</h1>
+            <span class="subheading">Simplify and Conquer the Diseases</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="container">
+    <div class="row"> 
+      <div class="col-lg-8 col-md-10 mx-auto">
+        <h1 class="post-title text-center" style="color: red">Most Recent Articles</h1>
+      </div>
+    </div> 
+    <div class="row">
+      <div class="col-lg-8 col-md-10 mx-auto">
+        {% for article in recents %}
+        <div class="post-preview">
+          <a href="/pathology/post/{{ article.id }}">
+            <h2 class="post-title">
+              {{ article.title }}
+            </h2>
+            <h3 class="post-subtitle">
+              {{ article.subtitle }}
+            </h3>
+          </a>
+          <p class="post-meta">Posted by
+            <a href="#">{{ article.author }}</a>
+            on {{ article.date_created.strftime('%B %d, %Y %I:%M %p') }}, {{ article.view_count }} views</p>
+        </div>
+        <hr>
+        {% endfor %}
+        
+        <!-- Pager -->
+        <div class="clearfix">
+          <a class="btn btn-primary float-right" href="/pathology/articles">All Articles &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+{% endblock %}
