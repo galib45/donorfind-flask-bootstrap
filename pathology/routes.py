@@ -1,4 +1,5 @@
 import os
+import datetime
 import flask
 import mistune
 from github import Github
@@ -83,9 +84,10 @@ def add():
 		title = form['title']
 		subtitle = form['subtitle']
 		author = form['author']
-		content = mistune.markdown(form['content'])
+		content = mistune.markdown(form['content'], escape=False)
+		date_created = datetime.datetime.now() + datetime.timedelta(hours=6)
 
-		article = Article.create(title=title, subtitle=subtitle, author=author, content=content)
+		article = Article.create(title=title, subtitle=subtitle, author=author, content=content, date_created=date_created)
 		article.save()
 		
 		print(title + ', ' + subtitle + ', ' + author + ', ' + content)

@@ -1,4 +1,3 @@
-from datetime import datetime
 import peewee
 
 db = peewee.SqliteDatabase('pathology/database.db')
@@ -13,7 +12,7 @@ class Article(BaseModel):
 	subtitle = peewee.CharField()
 	author = peewee.CharField()
 	content = peewee.TextField()
-	date_created = peewee.DateTimeField(default=datetime.now())
+	date_created = peewee.DateTimeField()
 	view_count = peewee.IntegerField(default=0)
 
 	def __repr__(self):
