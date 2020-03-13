@@ -2,6 +2,7 @@ import os
 import datetime
 import flask
 import mistune
+import werkzeug
 from github import Github
 from .models import *
 
@@ -99,3 +100,30 @@ def add():
 		repo.update_file('pathology/database.db', 'data added', new_content, sha_replaced)
 
 		return flask.redirect(flask.url_for('.index'))
+
+@pathology.route('/upload', methods=['GET', 'POST'])
+def upload():
+	if flask.request.method == 'GET':
+		return flask.render_template('upload.html')
+	else:
+		file = flask.request.files['file']
+		filename = 'pathology/' + werkzeug.secure_filename(file.filename)
+		file.save(filename)
+		with open(filename, 'rb') as file:
+			contents = file.read()
+		upload_filename = filename[0:10] + str(os.path.getsize(filename)) + filename[10:]
+		os.remove(filename)
+		filename = upload_filename
+		fileExists = False
+		for contentFile in repo.get_contents('pathology/'):
+			if contentFile.path == filename:
+				fileExists = True
+		if fileExists:
+			print('updating... ' + filename)
+			sha_replaced = repo.get_contents(filename).sha
+			repo.update_file(filename, 'update', contents, sha_replaced)
+		else:
+			print('uploading... ' + filename)
+			repo.create_file(filename, 'upload', contents)
+		base_url = 'https://raw.githubusercontent.com/galib45/galib-cloud/master/'
+		return base_url + filename
