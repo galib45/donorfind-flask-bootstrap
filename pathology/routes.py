@@ -1,7 +1,6 @@
 import os
 import datetime
 import flask
-import mistune
 import werkzeug
 from github import Github
 from .models import *
@@ -66,6 +65,34 @@ def post(id):
 	else:
 		return flask.redirect(flask.url_for('.index')) 
 
+@pathology.route('/edit/<int:id>', methods=['GET', 'POST'])
+def edit(id):
+	if Article.select().where(Article.id==id).exists():
+		article = Article.get(id)
+		if flask.request.method == 'GET':
+			content = [article.title, article.subtitle, article.author, article.content]
+			return flask.render_template('create.html', content=content)
+		else:
+			form = flask.request.form
+			article.title = form['title']
+			article.subtitle = form['subtitle']
+			article.author = form['author']
+			article.content = form['content']
+			article.save()
+		
+			print(article.title + ', ' + article.subtitle + ', ' + article.author + ', ' + article.content)
+
+			# updating the database on github repo
+			with open('pathology/database.db', 'rb') as file:
+				new_content = file.read()
+			sha_replaced = repo.get_contents('pathology/database.db').sha
+			repo.update_file('pathology/database.db', 'data added', new_content, sha_replaced)
+
+			return flask.redirect(flask.url_for('.index'))
+	else:
+		return flask.redirect(flask.url_for('.index'))
+
+
 @pathology.route('/articles')
 def articles():
 	articles = Article.select().order_by(Article.id.desc()).paginate(1, 10)
@@ -79,13 +106,14 @@ def articles():
 @pathology.route('/create', methods=['GET', 'POST'])
 def add():
 	if flask.request.method == 'GET':
-		return flask.render_template('create.html')
+		return flask.render_template('create.html', content=['', '', '', ''])
 	else:
 		form = flask.request.form
 		title = form['title']
 		subtitle = form['subtitle']
 		author = form['author']
-		content = mistune.markdown(form['content'], escape=False)
+		content = form['content']
+		# content = mistune.markdown(form['content'], escape=False)
 		date_created = datetime.datetime.now() + datetime.timedelta(hours=6)
 
 		article = Article.create(title=title, subtitle=subtitle, author=author, content=content, date_created=date_created)

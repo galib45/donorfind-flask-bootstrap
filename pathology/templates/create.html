@@ -8,10 +8,24 @@
       selector: 'textarea',
       mobile: {
         menubar: true,
+        plugins: 'advlist lists image autolink link table searchreplace fullscreen',
+        menubar: 'edit view insert format table',
+        menu: {
+          view: { title: 'View', items: 'fullscreen' },
+          format: { title: 'Format', items: 'bold italic superscript subscript | blockformats fontsizes align | forecolor backcolor'},
+        },
+        toolbar1: 'undo redo fullscreen | image link searchreplace',
+        toolbar2: 'formatselect fontsizeselect',
+        toolbar3: 'bold italic superscript subscript forecolor backcolor | alignleft aligncenter alignright alignjustify indent outdent numlist bullist',
       },
-      menubar: 'edit format table',
-      plugins: 'advlist lists image autolink link table searchreplace',
-      toolbar1: 'undo redo | formatselect fontselect fontsizeselect image link searchreplace',
+
+      plugins: 'advlist lists image autolink link table searchreplace fullscreen',
+      menubar: 'edit view insert format table',
+      menu: {
+        view: { title: 'View', items: 'fullscreen' },
+        format: { title: 'Format', items: 'bold italic superscript subscript | blockformats fontsizes align | forecolor backcolor'},
+      },
+      toolbar1: 'undo redo fullscreen | formatselect fontsizeselect image link searchreplace',
       toolbar2: 'bold italic superscript subscript forecolor backcolor | alignleft aligncenter alignright alignjustify indent outdent numlist bullist',
       images_upload_url: '/pathology/upload',
       images_upload_handler: function (blobInfo, success, failure) {
@@ -56,28 +70,28 @@
           <div class="control-group">
             <div class="form-group floating-label-form-group controls">
               <label>Title</label>
-              <input type="text" class="form-control" placeholder="Title of the article" name="title" required>
+              <input type="text" class="form-control" placeholder="Title of the article" name="title" value="{{ content[0] }}" required>
               <p class="help-block text-danger"></p>
             </div>
           </div>
           <div class="control-group">
             <div class="form-group floating-label-form-group controls">
               <label>Subtitle</label>
-              <input type="text" class="form-control" placeholder="Subtitle of the article" name="subtitle" required>
+              <input type="text" class="form-control" placeholder="Subtitle of the article" name="subtitle" value="{{ content[1] }}" required>
               <p class="help-block text-danger"></p>
             </div>
           </div>
           <div class="control-group">
             <div class="form-group col-xs-12 floating-label-form-group controls">
               <label>Author</label>
-              <input type="text" class="form-control" placeholder="Name of the Author" name="author" required>
+              <input type="text" class="form-control" placeholder="Name of the Author" name="author" value="{{ content[2] }}" required>
               <p class="help-block text-danger"></p>
             </div>
           </div>
           <div class="control-group">
             <div class="form-group floating-label-form-group controls">
               <label>Content</label>
-              <textarea rows="15" class="form-control" placeholder="Content of the article" name="content"></textarea>
+              <textarea rows="15" class="form-control" placeholder="Content of the article" name="content">{{ content[3] }}</textarea>
               <p class="help-block text-danger"></p>
             </div>
           </div>
