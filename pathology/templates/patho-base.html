@@ -105,6 +105,10 @@
   <!-- Custom scripts for this template -->
   <script src="{{ url_for('pathology.static', filename='clean-blog.min.js')}}"></script>
 
+  <script>
+    {% block script %}{% endblock %}
+  </script>>
+
 </body>
 
 </html>

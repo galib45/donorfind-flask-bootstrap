@@ -87,3 +87,16 @@ tbody tr:nth-child(even) {
 
   <hr>
 {% endblock %}
+
+{% block script %}
+var tables = document.getElementsByTagName('table');
+var i, wrapper, table;
+
+for (i=0; i<tables.length; i++) {
+  table = tables[i];
+  wrapper = document.createElement('div');
+  tables[i].parentNode.replaceChild(wrapper, table);
+  wrapper.appendChild(table);
+  wrapper.style.overflowX = 'auto';
+}
+{% endblock %}
