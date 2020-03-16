@@ -1,11 +1,58 @@
 {% extends "patho-base.html" %}
 {% block title %}{{ article.title }}{% endblock %}
 {% block style %}
- p, li {
+ .post p, li {
  -webkit-hyphens: auto;
  -ms-hyphens: auto;
  hyphens: auto;
 }
+.post {
+  overflow-x: auto !important;
+  font-family: 'Roboto';
+}
+
+.post h1, h2, h3, h4, h5, h6 {
+  font-family: 'Montserrat';
+  margin: 20px 0px;
+}
+
+.post p {
+  margin: 20px 0px;
+}
+
+table {
+  box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.12);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+table, th, td {
+  border: 0 !important;
+  border-collapse: collapse !important;
+}
+
+th, td {
+  padding: 10px !important;
+}
+
+.post thead {
+  background-color: #545a60;
+  color: white;
+  font-family: 'Poppins';
+  letter-spacing: 0.6px;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f3f3f3;
+}
+
+.post img {
+  width: 100% !important;
+  height: auto;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 {% endblock %}
 
 {% block content %}
@@ -31,7 +78,7 @@
   <article>
     <div class="container">
       <div class="row">
-        <div class="col-lg-10 col-md-12 mx-auto">
+        <div class="col-lg-10 col-md-12 mx-auto post">
           {{ article.content | safe }}
         </div>
       </div>
