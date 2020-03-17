@@ -1,6 +1,31 @@
 {% extends "patho-base.html" %}
 {% block title %}All Articles ({{ page_num }}){% endblock %}
 
+{% block style %}
+.btn-circle {
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.35);
+  background-color: var(--foreground);
+  color: var(--background);
+  height: 50px; width: 50px;
+  border-radius: 50%;
+  text-align: center;
+  padding: 10px;
+  margin: 5px;
+}
+
+.btn-circle:hover {
+  text-decoration: none;
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.active {
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+{% endblock %}
+
 {% block content %}
   <!-- Page Header -->
   <header class="masthead">
@@ -38,12 +63,113 @@
         <hr>
         {% endfor %}
         
-        {% if page_num < max_pages %}
+        
         <!-- Pager -->
-        <div class="clearfix">
-          <a class="btn btn-primary float-right" href="{{ url_for('pathology.articles', page=page_num+1) }}">Next &rarr;</a>
-        </div>
-        {% endif %}
+        <nav>
+          <ul class="pagination justify-content-center" style="display: block;">
+            {% if page_num > 1 %}
+            <li class="page-item">
+              <a class="btn-circle float-left" href="{{ url_for('pathology.articles', page=page_num-1) }}">
+                <i class="fas fa-arrow-left"></i>
+              </a>
+            </li>
+            {% endif %}
+            {% if max_pages <= 7 and max_pages > 1%}
+              {% for i in range(max_pages) %}
+              <li class="page-item">
+                <a class="btn-circle float-left {% if i+1==page_num %} active {% endif %}" href="{{ url_for('pathology.articles', page=i+1) }}">
+                  {{ i+1 }}
+                </a>
+              </li>
+              {% endfor %}
+            {% endif %}
+            {% if max_pages > 7 %}
+              {% if page_num < 5 %}
+                {% for i in range(1, 6) %}
+                <li class="page-item">
+                  <a class="btn-circle float-left {% if i==page_num %} active {% endif %}" href="{{ url_for('pathology.articles', page=i) }}">
+                    {{ i }}
+                  </a>
+                </li>
+                {% endfor %}
+                <li class="page-item">
+                  <span class="float-left" style="padding: 10px; margin: 5px;">
+                    . . .
+                  </span>
+                </li>
+                <li class="page-item">
+                  <a class="btn-circle float-left" href="{{ url_for('pathology.articles', page=max_pages) }}">
+                    {{ max_pages }}
+                  </a>
+                </li>
+              {% endif %}
+              {% if page_num >= max_pages-3 %}
+                <li class="page-item">
+                  <a class="btn-circle float-left" href="{{ url_for('pathology.articles', page=1) }}">
+                    1
+                  </a>
+                </li>
+                <li class="page-item">
+                  <span class="float-left" style="padding: 10px; margin: 5px;">
+                    . . .
+                  </span>
+                </li>
+                {% for i in range(max_pages-4, max_pages+1) %}
+                <li class="page-item">
+                  <a class="btn-circle float-left {% if i==page_num %} active {% endif %}" href="{{ url_for('pathology.articles', page=i) }}">
+                    {{ i }}
+                  </a>
+                </li>
+                {% endfor %}
+              {% endif %}
+              {% if page_num >= 5 and page_num < max_pages-3 %}
+              <li class="page-item">
+                <a class="btn-circle float-left" href="{{ url_for('pathology.articles', page=1) }}">
+                  1
+                </a>
+              </li>
+              <li class="page-item">
+                <span class="float-left" style="padding: 10px; margin: 5px;">
+                    . . .
+                </span>
+              </li>
+              <li class="page-item">
+                <a class="btn-circle float-left" href="{{ url_for('pathology.articles', page=page_num-1) }}">
+                  {{ page_num-1 }}
+                </a>
+              </li>
+              <li class="page-item">
+                <a class="btn-circle float-left active" href="{{ url_for('pathology.articles', page=page_num) }}">
+                  {{ page_num }}
+                </a>
+              </li>
+              <li class="page-item">
+                <a class="btn-circle float-left" href="{{ url_for('pathology.articles', page=page_num+1) }}">
+                  {{ page_num+1 }}
+                </a>
+              </li>
+              <li class="page-item">
+                <span class="float-left" style="padding: 10px; margin: 5px;">
+                    . . .
+                </span>
+              </li>
+              <li class="page-item">
+                <a class="btn-circle float-left" href="{{ url_for('pathology.articles', page=max_pages) }}">
+                  {{ max_pages }}
+                </a>
+              </li>
+              {% endif %}
+            {% endif %}
+            {% if page_num < max_pages %}
+              <li class="page-item">
+                <a class="btn-circle float-left" href="{{ url_for('pathology.articles', page=page_num+1) }}">
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </li>
+            {% endif %}
+          </ul>
+        </nav>
+        
       </div>
     </div>
   </div>

@@ -1,4 +1,5 @@
 import os
+import math
 import datetime
 import flask
 import werkzeug
@@ -13,6 +14,13 @@ pathology = flask.Blueprint(
 				static_folder='static',
 				url_prefix = '/pathology'
 			)
+
+def update_repo():
+	# updating the database on github repo
+	with open('pathology/database.db', 'rb') as file:
+		new_content = file.read()
+	sha_replaced = repo.get_contents('pathology/database.db').sha
+	repo.update_file('pathology/database.db', 'data added', new_content, sha_replaced)
 
 # initialize the github repository of the database
 user = Github('galib45', 'ribosome80S').get_user()
@@ -40,12 +48,7 @@ def delete(id):
 	if Article.select().where(Article.id==id).exists():
 		article = Article.get(id)
 		article.delete_instance()
-
-		# updating the database on github repo
-		with open('pathology/database.db', 'rb') as file:
-			new_content = file.read()
-		sha_replaced = repo.get_contents('pathology/database.db').sha
-		repo.update_file('pathology/database.db', 'data added', new_content, sha_replaced)
+		update_repo()
 	return flask.redirect(flask.url_for('.index'))
 
 @pathology.route('/post/<int:id>')
@@ -55,11 +58,7 @@ def post(id):
 		article.view_count += 1
 		article.save()
 		
-		# updating the database on github repo
-		with open('pathology/database.db', 'rb') as file:
-			new_content = file.read()
-		sha_replaced = repo.get_contents('pathology/database.db').sha
-		repo.update_file('pathology/database.db', 'data added', new_content, sha_replaced)
+		update_repo()
 		
 		return flask.render_template('post.html', article=article)
 	else:
@@ -82,12 +81,7 @@ def edit(id):
 		
 			print(article.title + ', ' + article.subtitle + ', ' + article.author + ', ' + article.content)
 
-			# updating the database on github repo
-			with open('pathology/database.db', 'rb') as file:
-				new_content = file.read()
-			sha_replaced = repo.get_contents('pathology/database.db').sha
-			repo.update_file('pathology/database.db', 'data added', new_content, sha_replaced)
-
+			update_repo()
 			return flask.redirect(flask.url_for('.index'))
 	else:
 		return flask.redirect(flask.url_for('.index'))
@@ -95,13 +89,21 @@ def edit(id):
 
 @pathology.route('/articles')
 def articles():
-	articles = Article.select().order_by(Article.id.desc()).paginate(1, 10)
+	items_per_page = 10
 	total = Article.select().count()
+	max_pages = math.ceil(total / items_per_page)
+
 	if 'page' in flask.request.args:
-		page_num = flask.request.args['page']
+		page_num = int(flask.request.args['page'])
 	else: page_num = 1
-	max_pages = total // 10 + 1
-	return flask.render_template('articles.html', articles=articles, page_num=page_num, total=total, max_pages=max_pages)
+	if page_num<1: page_num=1
+	articles = Article.select() \
+				.order_by(Article.id.desc()) \
+				.paginate(page_num, items_per_page)	
+	
+	return flask.render_template(
+		'articles.html', articles=articles, 
+		page_num=page_num, total=total, max_pages=max_pages)
 
 @pathology.route('/create', methods=['GET', 'POST'])
 def add():
@@ -113,7 +115,6 @@ def add():
 		subtitle = form['subtitle']
 		author = form['author']
 		content = form['content']
-		# content = mistune.markdown(form['content'], escape=False)
 		date_created = datetime.datetime.now() + datetime.timedelta(hours=6)
 
 		article = Article.create(title=title, subtitle=subtitle, author=author, content=content, date_created=date_created)
@@ -121,12 +122,7 @@ def add():
 		
 		print(title + ', ' + subtitle + ', ' + author + ', ' + content)
 
-		# updating the database on github repo
-		with open('pathology/database.db', 'rb') as file:
-			new_content = file.read()
-		sha_replaced = repo.get_contents('pathology/database.db').sha
-		repo.update_file('pathology/database.db', 'data added', new_content, sha_replaced)
-
+		update_repo()
 		return flask.redirect(flask.url_for('.index'))
 
 @pathology.route('/upload', methods=['GET', 'POST'])

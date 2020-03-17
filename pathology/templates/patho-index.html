@@ -1,6 +1,22 @@
 {% extends "patho-base.html" %}
 {% block title %}Home{% endblock %}
+{% block style %}
+.button {
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.35);
+  background-color: var(--foreground);
+  color: var(--background);
+  border-radius: 150px;
+  text-align: center;
+  padding: 15px;
+  margin: 0;
+}
 
+.button:hover {
+  text-decoration: none;
+  background-color: var(--background);
+  color: var(--foreground);
+}
+{% endblock %}
 {% block content %}
   <!-- Page Header -->
   <header class="masthead" style="background-image: url('{{ url_for('pathology.static', filename='img/home-bg.jpg') }}')">
@@ -45,7 +61,10 @@
         
         <!-- Pager -->
         <div class="clearfix">
-          <a class="btn btn-primary float-right" href="/pathology/articles">All Articles &rarr;</a>
+          <a class="button float-right" href="/pathology/articles">
+            All Articles
+            <i class="fas fa-arrow-right"></i>
+          </a>
         </div>
       </div>
     </div>

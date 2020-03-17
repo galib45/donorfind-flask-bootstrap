@@ -23,6 +23,10 @@
   <link href="{{ url_for('pathology.static', filename='style.css') }}" rel="stylesheet">
 
   <style>
+    * {
+      --background: #545a60;
+      --foreground: #fff;
+    }
     {% block style %}{% endblock %}
   </style>
 
@@ -62,7 +66,7 @@
   {% block content %}{% endblock %}
 
   <!-- Footer -->
-  <footer>
+  <footer style="padding: 5px !important;">
     <div class="container">
       <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
@@ -92,7 +96,7 @@
               </a>
             </li>
           </ul> -->
-          <p class="copyright text-muted">Copyright &copy; Pathology Simplified 2020</p>
+          <p class="copyright text-muted" style="margin: 0 !important;">Copyright &copy; Pathology Simplified 2020</p>
         </div>
       </div>
     </div>
