@@ -16,6 +16,8 @@ donorfind = flask.Blueprint(
 def extract_num(value):
 	return ''.join([c for c in value if c.isdigit()])
 
+global repo
+
 # initialize the github repository of the database
 user = Github('galib45', 'ribosome80S').get_user()
 repo = user.get_repo('galib-cloud')
@@ -27,13 +29,9 @@ if not os.path.isfile('donorfind/database.db'):
 	with open('donorfind/database.db', 'wb') as file:
 		file.write(file_content)
 
-# initialize the database
-#db = database.Database()
-
 # routing commands
 @donorfind.route('/')
 def index():
-	#stat = db.statistics()
 	categories = set([x.blood_group for x in Donor.select()])
 	stat = [(cat, Donor.select().where(Donor.blood_group==cat).count()) for cat in categories]
 	stat.append(('Total', Donor.select().count()))

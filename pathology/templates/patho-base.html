@@ -17,15 +17,24 @@
   <link href="{{ url_for('pathology.static', filename='all.min.css') }}" rel="stylesheet" type="text/css">
   <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
   <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Lato|Montserrat|Open+Sans|Poppins|Roboto&display=swap' rel='stylesheet' type='text/css'>
 
   <!-- Custom styles for this template -->
   <link href="{{ url_for('pathology.static', filename='clean-blog.min.css') }}" rel="stylesheet">
-  <link href="{{ url_for('pathology.static', filename='style.css') }}" rel="stylesheet">
 
   <style>
     * {
       --background: #545a60;
       --foreground: #fff;
+      --shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
+    }
+
+    .prev {
+    	background: rgba(200, 255, 255, 0.25);
+    	padding: 10px 30px;
+    	border-radius: 10px;
+    	box-shadow: var(--shadow);
+    	margin: 20px 0;
     }
     {% block style %}{% endblock %}
   </style>

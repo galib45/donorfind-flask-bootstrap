@@ -15,12 +15,7 @@ pathology = flask.Blueprint(
 				url_prefix = '/pathology'
 			)
 
-def update_repo():
-	# updating the database on github repo
-	with open('pathology/database.db', 'rb') as file:
-		new_content = file.read()
-	sha_replaced = repo.get_contents('pathology/database.db').sha
-	repo.update_file('pathology/database.db', 'data added', new_content, sha_replaced)
+global repo
 
 # initialize the github repository of the database
 user = Github('galib45', 'ribosome80S').get_user()
@@ -33,6 +28,12 @@ if not os.path.isfile('pathology/database.db'):
 	with open('pathology/database.db', 'wb') as file:
 		file.write(file_content)
 
+def update_repo():
+	# updating the database on github repo
+	with open('pathology/database.db', 'rb') as file:
+		new_content = file.read()
+	sha_replaced = repo.get_contents('pathology/database.db').sha
+	repo.update_file('pathology/database.db', 'data added', new_content, sha_replaced)
 
 @pathology.route('/')
 def index():
@@ -89,20 +90,30 @@ def edit(id):
 
 @pathology.route('/articles')
 def articles():
-	items_per_page = 10
-	total = Article.select().count()
-	max_pages = math.ceil(total / items_per_page)
-
 	if 'page' in flask.request.args:
 		page_num = int(flask.request.args['page'])
 	else: page_num = 1
 	if page_num<1: page_num=1
-	articles = Article.select() \
+
+	if 'q' in flask.request.args:
+		qstring = flask.request.args['q']
+	else: qstring = ''
+	
+	items_per_page = 1
+	articles = Article.select().where(
+		Article.title.contains(qstring) |
+		Article.subtitle.contains(qstring) |
+		Article.content.contains(qstring)
+		)
+	total = articles.count()
+	max_pages = math.ceil(total / items_per_page)
+
+	articles = articles \
 				.order_by(Article.id.desc()) \
 				.paginate(page_num, items_per_page)	
 	
 	return flask.render_template(
-		'articles.html', articles=articles, 
+		'articles.html', articles=articles, qstring=qstring,
 		page_num=page_num, total=total, max_pages=max_pages)
 
 @pathology.route('/create', methods=['GET', 'POST'])

@@ -2,8 +2,8 @@
 {% block title %}Home{% endblock %}
 {% block style %}
 .button {
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.35);
-  background-color: var(--foreground);
+  box-shadow: var(--shadow);
+  background-color: rgba(255, 235, 59, 0.75);
   color: var(--background);
   border-radius: 150px;
   text-align: center;
@@ -43,7 +43,7 @@
     <div class="row">
       <div class="col-lg-8 col-md-10 mx-auto">
         {% for article in recents %}
-        <div class="post-preview">
+        <div class="post-preview prev">
           <a href="/pathology/post/{{ article.id }}">
             <h2 class="post-title">
               {{ article.title }}
@@ -53,10 +53,9 @@
             </h3>
           </a>
           <p class="post-meta">Posted by
-            <a href="#">{{ article.author }}</a>
+            <i>{{ article.author }}</i>
             on {{ article.date_created.strftime('%B %d, %Y %I:%M %p') }}, {{ article.view_count }} views</p>
         </div>
-        <hr>
         {% endfor %}
         
         <!-- Pager -->
