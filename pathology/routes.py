@@ -4,6 +4,7 @@ import datetime
 import flask
 import werkzeug
 from github import Github
+from bs4 import BeautifulSoup
 from .models import *
 
 # create the blueprint
@@ -34,6 +35,16 @@ def update_repo():
 		new_content = file.read()
 	sha_replaced = repo.get_contents('pathology/database.db').sha
 	repo.update_file('pathology/database.db', 'data added', new_content, sha_replaced)
+
+def addIds(html):
+	# add ids to h1, h2, h3 tags for internal links
+	soup = BeautifulSoup(html, 'html.parser')
+	selector = 'h1, h2, h3'
+	headings = soup.select(selector)
+	print(headings)
+	for heading in headings:
+		heading['id'] = heading.get_text().strip().replace(' ', '_').lower()
+	return soup.prettify()
 
 @pathology.route('/')
 def index():
@@ -77,7 +88,7 @@ def edit(id):
 			article.title = form['title']
 			article.subtitle = form['subtitle']
 			article.author = form['author']
-			article.content = form['content']
+			article.content = addIds(form['content'])
 			article.save()
 		
 			print(article.title + ', ' + article.subtitle + ', ' + article.author + ', ' + article.content)
@@ -125,7 +136,7 @@ def add():
 		title = form['title']
 		subtitle = form['subtitle']
 		author = form['author']
-		content = form['content']
+		content = addIds(form['content'])
 		date_created = datetime.datetime.now() + datetime.timedelta(hours=6)
 
 		article = Article.create(title=title, subtitle=subtitle, author=author, content=content, date_created=date_created)
