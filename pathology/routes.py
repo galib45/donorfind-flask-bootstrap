@@ -177,26 +177,3 @@ def upload():
 
 		# return the data url
 		return data_url
-		
-		'''
-		# reading the saved file and saving the content
-		with open(filename, 'rb') as file:
-			contents = file.read()
-		upload_filename = filename[0:10] + str(os.path.getsize(filename)) + filename[10:]
-		
-		# removing the saved file
-		os.remove(filename)
-		filename = upload_filename
-		fileExists = False
-		for contentFile in repo.get_contents('pathology/'):
-			if contentFile.path == filename:
-				fileExists = True
-		if fileExists:
-			print('updating... ' + filename)
-			sha_replaced = repo.get_contents(filename).sha
-			repo.update_file(filename, 'update', contents, sha_replaced)
-		else:
-			print('uploading... ' + filename)
-			repo.create_file(filename, 'upload', contents)
-		base_url = 'https://raw.githubusercontent.com/galib45/galib-cloud/master/'
-		return base_url + filename'''
