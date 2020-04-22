@@ -5,6 +5,7 @@ import flask
 import werkzeug
 from github import Github
 from bs4 import BeautifulSoup
+from .utils import *
 from .models import *
 
 # create the blueprint
@@ -165,12 +166,25 @@ def upload():
 	if flask.request.method == 'GET':
 		return flask.render_template('upload.html')
 	else:
+		# getting the file data & saving it
 		file = flask.request.files['file']
 		filename = 'pathology/' + werkzeug.secure_filename(file.filename)
 		file.save(filename)
+
+		# get the data url then delete the file
+		data_url = getDataUrl(filename)
+		os.remove(filename)
+
+		# return the data url
+		return data_url
+		
+		'''
+		# reading the saved file and saving the content
 		with open(filename, 'rb') as file:
 			contents = file.read()
 		upload_filename = filename[0:10] + str(os.path.getsize(filename)) + filename[10:]
+		
+		# removing the saved file
 		os.remove(filename)
 		filename = upload_filename
 		fileExists = False
@@ -185,4 +199,4 @@ def upload():
 			print('uploading... ' + filename)
 			repo.create_file(filename, 'upload', contents)
 		base_url = 'https://raw.githubusercontent.com/galib45/galib-cloud/master/'
-		return base_url + filename
+		return base_url + filename'''
