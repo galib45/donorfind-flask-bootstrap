@@ -20,7 +20,15 @@ pathology = flask.Blueprint(
 
 global repo
 
-def getDatabaseFileContent():
+def getFileSha(path):
+	directory = [content for content in repo.get_contents('pathology')]
+	files = list(filter(lambda file: file.path==path, directory))
+	if len(files):
+		return files[0].sha
+	else:
+		raise Exception('file not found')
+
+def getFileContent():
 	directory = [content for content in repo.get_contents('pathology')]
 	files = list(filter(lambda file: file.path=='pathology/database.db', directory))
 	if len(files):
@@ -46,7 +54,7 @@ def update_repo():
 	print('updating repo ...')
 	with open('pathology/database.db', 'rb') as file:
 		new_content = file.read()
-	sha_replaced = repo.get_contents('pathology/database.db').sha
+	sha_replaced = getFileSha('pathology/database.db')
 	repo.update_file('pathology/database.db', 'data added', new_content, sha_replaced)
 	print('done.')
 
