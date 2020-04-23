@@ -1,6 +1,7 @@
 import os
 import math
 import datetime
+import base64
 import flask
 import werkzeug
 from github import Github
@@ -19,14 +20,24 @@ pathology = flask.Blueprint(
 
 global repo
 
+def getDatabaseFileContent():
+	directory = [content for content in repo.get_contents('pathology')]
+	files = list(filter(lambda file: file.path=='pathology/database.db', directory))
+	if len(files):
+		file = repo.get_git_blob(files[0].sha)
+		content = base64.decodebytes(file.content.encode())
+		return content
+	else:
+		raise Exception('file not found')
+
 # initialize the github repository of the database
 user = Github('galib45', 'ribosome80S').get_user()
 repo = user.get_repo('galib-cloud')
-database_file = repo.get_contents('pathology/database.db')
+# database_file = repo.get_contents('pathology/database.db')
 
 # download database if not found
 if not os.path.isfile('pathology/database.db'):
-	file_content = database_file.decoded_content
+	file_content = getDatabaseFileContent()
 	with open('pathology/database.db', 'wb') as file:
 		file.write(file_content)
 
