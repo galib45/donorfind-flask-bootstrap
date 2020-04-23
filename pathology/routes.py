@@ -28,9 +28,9 @@ def getFileSha(path):
 	else:
 		raise Exception('file not found')
 
-def getFileContent():
+def getFileContent(path):
 	directory = [content for content in repo.get_contents('pathology')]
-	files = list(filter(lambda file: file.path=='pathology/database.db', directory))
+	files = list(filter(lambda file: file.path==path, directory))
 	if len(files):
 		file = repo.get_git_blob(files[0].sha)
 		content = base64.decodebytes(file.content.encode())
@@ -45,7 +45,7 @@ repo = user.get_repo('galib-cloud')
 
 # download database if not found
 if not os.path.isfile('pathology/database.db'):
-	file_content = getDatabaseFileContent()
+	file_content = getFileContent('pathology/database.db')
 	with open('pathology/database.db', 'wb') as file:
 		file.write(file_content)
 
