@@ -13,7 +13,8 @@ def wrapText(text, width):
 	for line in text.split('\n'):
 		text_array.extend(textwrap.wrap(line, width=width))
 	text = "\n".join(text_array)
-	text_height = font.getsize(text)[1]*len(text_array)
+	lines = len(text_array)
+	text_height = font.getsize(text)[1]*lines + 20*lines
 	return text, text_height
 
 # initialize the app
