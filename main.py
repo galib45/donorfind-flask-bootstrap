@@ -57,7 +57,7 @@ def create_poster():
 		bg = Image.new('RGB', (width, height), color='white')
 		draw = ImageDraw.Draw(bg)
 		fg.paste(logo, ((width-logo_w)//2, (height-logo_h)//2))
-		Image.blend(bg, fg, 0.25).save('bg.png')
+		Image.blend(bg, fg, 0.20).save('bg.png')
 		
 		image = Image.open('bg.png')
 		draw = ImageDraw.Draw(image)
