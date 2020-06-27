@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Create Poster for Q/A</title>
+	<link rel="stylesheet" href="">
+	<style type="text/css" media="screen">
+		body {
+			display: flex;
+			flex-direction: column;
+		}
+		div {
+			width: 90%;
+			margin: auto;
+			display: flex;
+			flex-direction: column;
+		}
+		p {
+			margin-bottom: 5px;
+		}
+		textarea {
+			width: 70%;
+			font-family: sans-serif;
+			font-size: 0.85em;
+		}
+		button {
+			padding: 5px;
+			margin: 20px 0;
+		}
+	</style>
+</head>
+<body>
+	<div><h1>Poster Creation for CallosumBD Daily Quiz</h1></div>
+	<form action="#" method="post" accept-charset="utf-8">
+	<div>
+		<p>Question</p>
+		<textarea rows="5" placeholder="Write the whole question or the scenario here" name="question"></textarea>
+	</div>
+
+	<div>
+		<p>Special Line</p>
+		<textarea rows="2" placeholder="Write the line you want to highlight" name="special"></textarea>
+	</div>
+
+	<div>
+		<p>Options</p>
+		<textarea rows="5" placeholder="Write the options of the question here" name="options"></textarea>
+	</div>
+
+	<div>
+		<button type="submit">Create Poster</button>
+	</div>
+	</form>
+</body>
+</html>

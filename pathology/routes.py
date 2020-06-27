@@ -89,10 +89,10 @@ def delete(id):
 def post(id):
 	if Article.select().where(Article.id==id).exists():
 		article = Article.get(id)
-		article.view_count += 1
+		'''article.view_count += 1
 		article.save()
 		
-		update_repo()
+		update_repo()'''
 		
 		return flask.render_template('post.html', article=article)
 	else:

@@ -19,3 +19,4 @@ Werkzeug==0.16.1
 wrapt==1.11.2
 soupsieve==2.0
 beautifulsoup4==4.8.2
+Pillow==7.1.2
