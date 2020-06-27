@@ -7,6 +7,12 @@ import datetime
 import textwrap
 from PIL import Image, ImageDraw, ImageFont
 
+global repo
+
+# initialize the github repository of the database
+user = Github('galib45', 'ribosome80S').get_user()
+repo = user.get_repo('galib-cloud')
+
 font = ImageFont.truetype('Product Sans Regular.ttf', 36)
 bfont = ImageFont.truetype('Product Sans Bold.ttf', 36)
 def wrapText(text, width):
@@ -66,7 +72,11 @@ def create_poster():
 		draw.multiline_text((100, 60+que_h+40+spe_h+60), opt_text, (0, 0, 0), font=font, spacing=20)
 		image.save(filename)
 
-		return flask.send_from_directory('', filename, as_attachment=True)
+		with open(filename, 'rb') as file:
+			content = file.read()
+		repo.create_file('posters/'+filename, filename, content)
+		return flask.redirect('https://raw.githubusercontent.com/galib45/galib-cloud/master/posters/'+filename)
+		#return flask.send_from_directory('', filename, as_attachment=True)
 
 if __name__=='__main__':
 	app.run()
