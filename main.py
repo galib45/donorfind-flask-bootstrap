@@ -59,7 +59,7 @@ def create_poster():
 		image.paste(logo, ((width-logo_w)//2, (height-logo_h-30)))
 		image.save(filename)
 
-		return flask.send_from_directory('', filename)
+		return flask.send_from_directory('', filename, as_attachment=True)
 
 if __name__=='__main__':
 	app.run()
