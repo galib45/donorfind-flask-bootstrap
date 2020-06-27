@@ -54,15 +54,16 @@ def create_poster():
 		height = 60 + que_h + 40 + spe_h + 60 + opt_h + 60
 
 		fg = Image.new('RGB', (width, height), color='white')
-		draw = ImageDraw.Draw(fg)
-		draw.multiline_text((60, 60), que_text, (0, 0, 0), font=font, spacing=20)
-		draw.multiline_text((60, 60+que_h+40), spe_text, (255, 0, 0), font=bfont, spacing=20)
-		draw.multiline_text((100, 60+que_h+40+spe_h+60), opt_text, (0, 0, 0), font=font, spacing=20)
-		
 		bg = Image.new('RGB', (width, height), color='white')
 		draw = ImageDraw.Draw(bg)
 		fg.paste(logo, ((width-logo_w)//2, (height-logo_h)//2))
-		Image.blend(bg, fg, 0.25).save(filename)
+		Image.blend(bg, fg, 0.25).save('bg.png')
+		
+		image = Image.open('bg.png')
+		draw = ImageDraw.Draw(image)
+		draw.multiline_text((60, 60), que_text, (0, 0, 0), font=font, spacing=20)
+		draw.multiline_text((60, 60+que_h+40), spe_text, (255, 0, 0), font=bfont, spacing=20)
+		draw.multiline_text((100, 60+que_h+40+spe_h+60), opt_text, (0, 0, 0), font=font, spacing=20)
 
 		return flask.send_from_directory('', filename, as_attachment=True)
 
