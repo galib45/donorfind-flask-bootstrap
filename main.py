@@ -8,6 +8,7 @@ import textwrap
 from PIL import Image, ImageDraw, ImageFont
 
 font = ImageFont.truetype('Product Sans Regular.ttf', 36)
+bfont = ImageFont.truetype('Product Sans Bold.ttf', 36)
 def wrapText(text, width):
 	text_array = []
 	for line in text.split('\n'):
@@ -50,15 +51,18 @@ def create_poster():
 		logo_w, logo_h = logo.size
 
 		width = 960
-		height = 60 + que_h + 60 + spe_h + 60 + opt_h + 120 + logo_h + 30
+		height = 60 + que_h + 40 + spe_h + 60 + opt_h + 120 + logo_h + 30
 
-		image = Image.new('RGB', (width, height), color='white')
-		draw = ImageDraw.Draw(image)
+		fg = Image.new('RGB', (width, height), color='white')
+		draw = ImageDraw.Draw(fg)
 		draw.multiline_text((60, 60), que_text, (0, 0, 0), font=font, spacing=20)
-		draw.multiline_text((60, 60+que_h+60), spe_text, (0, 0, 255), font=font, spacing=20)
-		draw.multiline_text((100, 60+que_h+60+spe_h+60), opt_text, (0, 0, 0), font=font, spacing=20)
-		image.paste(logo, ((width-logo_w)//2, (height-logo_h-30)))
-		image.save(filename)
+		draw.multiline_text((60, 60+que_h+40), spe_text, (255, 0, 0), font=bfont, spacing=20)
+		draw.multiline_text((100, 60+que_h+40+spe_h+60), opt_text, (0, 0, 0), font=font, spacing=20)
+		
+		bg = Image.new('RGB', (width, height), color='white')
+		draw = ImageDraw.Draw(bg)
+		fg.paste(logo, ((width-logo_w)//2, (height-logo_h)//2))
+		Image.blend(bg, fg, 0.85).save(filename)
 
 		return flask.send_from_directory('', filename, as_attachment=True)
 
