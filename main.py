@@ -51,7 +51,7 @@ def create_poster():
 		logo_w, logo_h = logo.size
 
 		width = 960
-		height = 60 + que_h + 40 + spe_h + 60 + opt_h + 120 + logo_h + 30
+		height = 60 + que_h + 40 + spe_h + 60 + opt_h + 60
 
 		fg = Image.new('RGB', (width, height), color='white')
 		draw = ImageDraw.Draw(fg)
@@ -62,7 +62,7 @@ def create_poster():
 		bg = Image.new('RGB', (width, height), color='white')
 		draw = ImageDraw.Draw(bg)
 		fg.paste(logo, ((width-logo_w)//2, (height-logo_h)//2))
-		Image.blend(bg, fg, 0.85).save(filename)
+		Image.blend(bg, fg, 0.25).save(filename)
 
 		return flask.send_from_directory('', filename, as_attachment=True)
 
