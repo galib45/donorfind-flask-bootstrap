@@ -64,6 +64,7 @@ def create_poster():
 		draw.multiline_text((60, 60), que_text, (0, 0, 0), font=font, spacing=20)
 		draw.multiline_text((60, 60+que_h+40), spe_text, (255, 0, 0), font=bfont, spacing=20)
 		draw.multiline_text((100, 60+que_h+40+spe_h+60), opt_text, (0, 0, 0), font=font, spacing=20)
+		image.save(filename)
 
 		return flask.send_from_directory('', filename, as_attachment=True)
 
