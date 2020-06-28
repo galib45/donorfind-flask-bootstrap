@@ -7,10 +7,8 @@ var text = document.getElementById('text');
 var form = document.getElementById('form');
 var submit = document.getElementById('submit');
 var coreText = '';
+
 addButton.addEventListener('click', function() {
-	if(inputText.innerHTML=='') {
-		text.value = '';
-	}
 	coreText = '<font color="' + color.value + '">' + paragraph.value.replace(/\n/g, '<br>') + '</font>';
 	inputText.innerHTML += '<p>';
 	if(bold.checked == true) {
@@ -26,4 +24,8 @@ addButton.addEventListener('click', function() {
 	M.textareaAutoResize(paragraph);
 	color.value = '#000000';
 	bold.checked = false;
+});
+
+form.addEventListener('submit', function() {
+	text.value = '';
 });
