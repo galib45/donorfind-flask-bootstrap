@@ -4,6 +4,8 @@ var bold = document.getElementById('bold');
 var color = document.getElementById('color');
 var inputText = document.getElementById('input-text');
 var text = document.getElementById('text');
+var form = document.getElementById('form');
+var submit = document.getElementById('submit');
 var coreText = '';
 addButton.addEventListener('click', function() {
 	coreText = '<font color="' + color.value + '">' + paragraph.value.replace(/\n/g, '<br>') + '</font>';
@@ -21,4 +23,9 @@ addButton.addEventListener('click', function() {
 	M.textareaAutoResize(paragraph);
 	color.value = '#000000';
 	bold.checked = false;
+});
+
+submit.addEventListener('click', function() {
+	form.submit();
+	form.reset();
 });
