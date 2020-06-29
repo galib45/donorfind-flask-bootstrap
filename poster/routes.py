@@ -1,7 +1,9 @@
 import flask
 import os
+import datetime
 from .utils import *
 from PIL import Image, ImageDraw, ImageFont
+from github import Github
 
 # create the blueprint
 poster = flask.Blueprint(
@@ -14,6 +16,12 @@ poster = flask.Blueprint(
 
 rfont = ImageFont.truetype('poster/Product Sans Regular.ttf', 36)
 bfont = ImageFont.truetype('poster/Product Sans Bold.ttf', 36)
+
+global repo
+
+# initialize the github repository of the database
+user = Github('galib45', 'ribosome80S').get_user()
+repo = user.get_repo('galib-cloud')
 
 @poster.route('/', methods=['GET', 'POST'])
 def create_poster():
@@ -46,15 +54,28 @@ def create_poster():
 		
 		image = Image.open('bg.png')
 		for paragraph in paragraphs:
-			print(paragraph)
+			# print(paragraph)
 			height, lines, font, color = paragraph
 			draw_multiline_text(image, (60, height), lines, color, font, line_spacing)
 		
-		image.save('bg.png')
+		filename = 'poster-' + datetime.datetime.utcnow().isoformat().replace(':', '-').replace('-', '') + '.png'
+		image.save(filename)
+
+		# save the file to Github
+		with open(filename, 'rb') as file:
+			content = file.read()
+		repo.create_file(
+			'posters/'+filename, 
+			'Poster Created on UTC time - '+datetime.datetime.utcnow().isoformat(),
+			content
+		)
 
 		# get the data url then delete the file
-		data_url = getDataUrl('bg.png')
+		# data_url = getDataUrl('bg.png')
 		os.remove('bg.png')
+		os.remove(filename)
 
 		# return the data url
-		return '<img src="'+data_url+'"'+'>'
+		# return '<img src="'+data_url+'"'+'>'
+		githubURL = 'https://raw.githubusercontent.com/galib45/galib-cloud/master/posters/' + filename
+		return flask.redirect(githubURL)
