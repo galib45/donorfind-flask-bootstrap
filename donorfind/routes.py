@@ -19,7 +19,8 @@ def extract_num(value):
 global repo
 
 # initialize the github repository of the database
-user = Github('9b111f6f6671e1240da419f87e67aabec11490a8').get_user()
+token = os.environ.get('github-access-token')
+user = Github(token).get_user()
 repo = user.get_repo('galib-cloud')
 database_file = repo.get_contents('database.db')
 
