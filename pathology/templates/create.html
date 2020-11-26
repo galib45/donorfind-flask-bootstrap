@@ -27,12 +27,12 @@
       },
       toolbar1: 'undo redo fullscreen code | blockquote formatselect fontsizeselect image link searchreplace',
       toolbar2: 'bold italic superscript subscript forecolor backcolor | alignleft aligncenter alignright alignjustify indent outdent numlist bullist',
-      images_upload_url: '/pathology/upload',
+      images_upload_url: '/meducation/upload',
       images_upload_handler: function (blobInfo, success, failure) {
         var xhr, formData;
         xhr = new XMLHttpRequest();
         xhr.withCredentials = false;
-        xhr.open('POST', '/pathology/upload');
+        xhr.open('POST', '/meducation/upload');
 
         xhr.onload = function() {
           if (xhr.status != 200) {

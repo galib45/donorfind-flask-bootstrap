@@ -20,7 +20,7 @@ bfont = ImageFont.truetype('poster/Product Sans Bold.ttf', 36)
 global repo
 
 # initialize the github repository of the database
-user = Github('galib45', 'ribosome80S').get_user()
+user = Github('9b111f6f6671e1240da419f87e67aabec11490a8').get_user()
 repo = user.get_repo('galib-cloud')
 
 @poster.route('/', methods=['GET', 'POST'])
