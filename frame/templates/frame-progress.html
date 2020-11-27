@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>Photo Frame</title>
+	<style>
+		#form-content {
+			border-radius: 10px;
+			box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.15);
+			padding: 5px 10px 0 10px;
+		}
+
+		#input-text {
+			padding: 0 0 10px 10px;
+		}
+	</style>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('frame.static', filename='materialize.css') }}">
+</head>
+<body>
+	<div class="container">
+		<div class="row"><h3>Photo Framer</h3></div>
+		<div class="row">
+			<form method="post" accept-charset="utf-8" id="form" enctype="multipart/form-data">
+    			<div class="row">
+    				<input type="file" name="imagefile" id="fileinput" accept="image/*" >
+    			</div>
+    			<div class="row">
+					<button class="orange waves-effect waves-light btn" type="submit" id="submit">Create Framed Photo</button>
+				</div>
+			</form>
+		</div>
+		<div class="row" id="progress_div" style="display: none;">
+			<p id="progress_status"></p>
+			<div class="progress">
+				<div></div>
+			</div>
+			<div id="link"><a href="">Download framed image.</a> This is an one-time link.</div>
+		</div>
+	</div>
+	<script src="{{ url_for('frame.static', filename='materialize.js') }}" type="text/javascript" charset="utf-8" async defer></script>
+	<script type="text/javascript">
+		btnSubmit = document.getElementById('submit');
+		fileInput = document.getElementById('fileinput');
+		
+		statusbar = document.getElementById('progress_status');
+		progressbar = document.querySelector('.progress > div');
+		progressdiv = document.querySelector('#progress_div');
+		link = document.querySelector('a');
+		linkdiv = document.querySelector('#link');
+		
+		form = document.getElementById('form');
+		xhr = new XMLHttpRequest();
+		formData = new FormData();
+		btnSubmit.addEventListener('click', function(e) {
+			e.preventDefault();
+			numFiles = fileInput.files.length;
+			if (numFiles < 1) {
+				alert('Please select a file to upload');
+			}
+			else {
+				filename = fileInput.files[0].name;
+				formData.append('imagefile', fileInput.files[0]);
+				xhr.open('POST', '{{ url_for('frame.create_poster_withprogress') }}', true);
+				xhr.upload.onloadstart = function() {
+					document.querySelector('.progress').style.display = 'block';
+					progressbar.classList.remove('indeterminate');
+					progressbar.classList.add('determinate');
+					progressbar.style.width = '0%';
+					progressdiv.style.display = 'block';
+					linkdiv.style.display = 'none';
+				}
+				xhr.upload.onprogress = function(e) {
+					percent = Math.floor(e.loaded/e.total*100);
+					progressbar.style.width = percent + '%';
+					//console.log(progressbar.style.width);
+					statusbar.innerHTML = 'Uploading... ' + percent + '%';
+				}
+				xhr.upload.onload = function() {
+					statusbar.innerHTML = 'Upload finished. Processing...';
+					progressbar.classList.remove('determinate');
+					progressbar.classList.add('indeterminate');
+				}
+				xhr.onloadend = function() {
+					timestamp = xhr.response.split('||')[0];
+					filename = xhr.response.split('||')[1];
+					console.log(timestamp, filename);
+					statusbar.innerHTML = 'Done';
+					form.reset();
+					document.querySelector('.progress').style.display = 'none';
+					link.href = '/frame/get/' + timestamp + '/' + filename;
+					linkdiv.style.display = 'block';
+				}
+				xhr.send(formData);
+			}
+		});
+	</script>
+</body>
+</html>
