@@ -88,6 +88,7 @@
 					console.log(timestamp, filename);
 					statusbar.innerHTML = 'Done';
 					form.reset();
+					formData = new FormData();
 					document.querySelector('.progress').style.display = 'none';
 					link.href = '/frame/get/' + timestamp + '/' + filename;
 					linkdiv.style.display = 'block';
