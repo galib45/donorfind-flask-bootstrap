@@ -6,14 +6,21 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<title>Photo Frame</title>
 	<style>
-		#form-content {
-			border-radius: 10px;
-			box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.15);
-			padding: 5px 10px 0 10px;
+		.fileinputlabel {
+			padding: 8px 12px;
+    		font-size: 1.1rem;
+		    color: darkslategrey;
+		    border: 2px solid #009688;
+		    border-radius: 20px;
 		}
 
-		#input-text {
-			padding: 0 0 10px 10px;
+		.fileinputlabel:hover {
+			background-color: #009688;
+			color: white;
+		}
+
+		#filelist {
+			margin-bottom: 25px;
 		}
 	</style>
 	<link rel="stylesheet" type="text/css" href="{{ url_for('frame.static', filename='materialize.css') }}">
@@ -21,13 +28,15 @@
 <body>
 	<div class="container">
 		<div class="row"><h3>Photo Framer</h3></div>
+		<div id="filelist" style="display: none;"></div>
 		<div class="row">
 			<form method="post" accept-charset="utf-8" id="form" enctype="multipart/form-data">
     			<div class="row">
-    				<input type="file" name="imagefile" id="fileinput" accept="image/*" >
+    				<label for="fileinput" class="fileinputlabel">Select file(s)</label>
+    				<input type="file" name="imagefile" id="fileinput" accept="image/png, image/jpeg" style="display: none;" multiple>
     			</div>
     			<div class="row">
-					<button class="orange waves-effect waves-light btn" type="submit" id="submit">Create Framed Photo</button>
+					<button class="teal waves-effect waves-light btn" type="submit" id="submit">Create Framed Photo</button>
 				</div>
 			</form>
 		</div>
@@ -36,64 +45,112 @@
 			<div class="progress">
 				<div></div>
 			</div>
-			<div id="link"><a href="">Download framed image.</a> This is an one-time link.</div>
+			<div id="link"></div>
 		</div>
 	</div>
 	<script src="{{ url_for('frame.static', filename='materialize.js') }}" type="text/javascript" charset="utf-8" async defer></script>
 	<script type="text/javascript">
 		btnSubmit = document.getElementById('submit');
 		fileInput = document.getElementById('fileinput');
+		inputlabel = document.querySelector('.fileinputlabel');
+		fileList = document.querySelector('#filelist');
+		fileInput.onchange = function() {
+			if (fileInput.files.length == 0) {
+				fileList.style.display = 'none';
+			} else {
+				fileList.style.display = 'block';
+			}
+			fileList.innerHTML = '';
+			for (var i=0; i<fileInput.files.length; i++) {
+				if (i != 0) fileList.innerHTML += ', ';
+				fileList.innerHTML += fileInput.files[i].name;
+			}
+		}
 		
 		statusbar = document.getElementById('progress_status');
 		progressbar = document.querySelector('.progress > div');
 		progressdiv = document.querySelector('#progress_div');
-		link = document.querySelector('a');
+		//link = document.querySelector('a');
 		linkdiv = document.querySelector('#link');
 		
 		form = document.getElementById('form');
 		xhr = new XMLHttpRequest();
 		formData = new FormData();
+		var currentFile;
+		var fileIndex = 0, numFiles = 0;
+
+		
+		xhr.upload.onloadstart = function() {
+			document.querySelector('.progress').style.display = 'block';
+			progressbar.classList.remove('indeterminate');
+			progressbar.classList.add('determinate');
+			progressbar.style.width = '0%';
+			progressdiv.style.display = 'block';
+			//linkdiv.style.display = 'none';
+		}
+		xhr.upload.onprogress = function(e) {
+			percent = Math.floor(e.loaded/e.total*100);
+			progressbar.style.width = percent + '%';
+			//console.log(progressbar.style.width);
+			statusbar.innerHTML = currentFile.name + ' >> ';
+			statusbar.innerHTML += 'Uploading... ' + percent + '%';
+		}
+		xhr.upload.onload = function() {
+			statusbar.innerHTML = currentFile.name + ' >> ';
+			statusbar.innerHTML += 'Upload finished. Processing...';
+			progressbar.classList.remove('determinate');
+			progressbar.classList.add('indeterminate');
+		}
+		xhr.onloadend = function() {
+			timestamp = xhr.response.split('||')[0];
+			filename = xhr.response.split('||')[1];
+			console.log(timestamp, filename);
+			statusbar.innerHTML = 'Done';
+			
+			document.querySelector('.progress').style.display = 'none';
+			// generate link
+			//link.href = '/frame/get/' + timestamp + '/' + filename;
+			//linkdiv.style.display = 'block';
+			href = '/frame/get/' + timestamp + '/' + filename;
+			linkelem = '<a href="' + href + '">framed-' + filename + '</a>';
+			linkdiv.innerHTML += linkelem + '<br>';
+			
+			if(fileIndex < numFiles) {
+				uploadAndProcessNext();
+			} else {
+				form.reset();
+				linkdiv.innerHTML += 'These links will expire in 30 minutes';
+				fileInput.disabled = false;
+				btnSubmit.disabled = false;
+				inputlabel.disabled = false;
+				fileList.innerHTML = '';
+				fileIndex = 0;
+			}
+		}
+		
+		function uploadAndProcessNext() {
+			console.log(fileIndex);
+			currentFile = fileInput.files[fileIndex++];
+			formData = new FormData();
+			formData.append('imagefile', currentFile);
+			xhr.open('POST', '{{ url_for('frame.create_poster_withprogress') }}', true);
+			xhr.send(formData);
+		}
+
+
 		btnSubmit.addEventListener('click', function(e) {
 			e.preventDefault();
+			linkdiv.innerHTML = '';
+			fileInput.disabled = true;
+			btnSubmit.disabled = true;
+			inputlabel.disabled = true;
+			
 			numFiles = fileInput.files.length;
 			if (numFiles < 1) {
 				alert('Please select a file to upload');
 			}
 			else {
-				filename = fileInput.files[0].name;
-				formData.append('imagefile', fileInput.files[0]);
-				xhr.open('POST', '{{ url_for('frame.create_poster_withprogress') }}', true);
-				xhr.upload.onloadstart = function() {
-					document.querySelector('.progress').style.display = 'block';
-					progressbar.classList.remove('indeterminate');
-					progressbar.classList.add('determinate');
-					progressbar.style.width = '0%';
-					progressdiv.style.display = 'block';
-					linkdiv.style.display = 'none';
-				}
-				xhr.upload.onprogress = function(e) {
-					percent = Math.floor(e.loaded/e.total*100);
-					progressbar.style.width = percent + '%';
-					//console.log(progressbar.style.width);
-					statusbar.innerHTML = 'Uploading... ' + percent + '%';
-				}
-				xhr.upload.onload = function() {
-					statusbar.innerHTML = 'Upload finished. Processing...';
-					progressbar.classList.remove('determinate');
-					progressbar.classList.add('indeterminate');
-				}
-				xhr.onloadend = function() {
-					timestamp = xhr.response.split('||')[0];
-					filename = xhr.response.split('||')[1];
-					console.log(timestamp, filename);
-					statusbar.innerHTML = 'Done';
-					form.reset();
-					formData = new FormData();
-					document.querySelector('.progress').style.display = 'none';
-					link.href = '/frame/get/' + timestamp + '/' + filename;
-					linkdiv.style.display = 'block';
-				}
-				xhr.send(formData);
+				uploadAndProcessNext();
 			}
 		});
 	</script>
