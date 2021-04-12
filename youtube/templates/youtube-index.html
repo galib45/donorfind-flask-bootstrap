@@ -28,7 +28,7 @@
 				</div>
 			</form>
 		</div>
-		{% if data != None %}
+		{% if data %}
 		<div class="row"><div class="col">
 			<img src="{{ data[4].thumbnail_url }}" alt="">
 			<h5>{{ data[0] }}</h4>
@@ -79,6 +79,20 @@
 					{% endfor %}
 				</tbody>
 			</table>
+		</div></div>
+		{% endif %}
+
+		{% if playlist %}
+		<div class="row"><div class="col">
+			<h5>{{ playlist[0] }}</h4>
+			<h6>{{ playlist[1] }} videos</h6>
+		</div></div>
+		<div class="row"><div class="col">
+			<ul class="collection">
+				{% for file in playlist[2] %}
+				<li class="collection-item">{{ file.title }}</li>
+				{% endfor %}
+			</ul>
 		</div></div>
 		{% endif %}
 	</div>
