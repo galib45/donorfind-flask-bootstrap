@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>YouTube Downloader</title>
+	<style>
+		img {
+			width: 100%;
+			height: auto;
+		}
+	</style>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('frame.static', filename='materialize.css') }}">
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col"><h3>YouTube Downloader</h3></div>
+		</div>
+		<div class="row">
+			<form method="post" id="form" >
+    			<div class="col s9 m10" style="padding-left:none;">
+    				<input type="url" class="validate" name="url" id="url" placeholder="YouTube video or playlist link">
+    			</div>
+    			<div class="col s2 m2">
+					<button class="teal waves-effect waves-light btn" type="submit" id="submit">Get</button>
+				</div>
+			</form>
+		</div>
+		{% if data != None %}
+		<div class="row"><div class="col">
+			<img src="{{ data[4].thumbnail_url }}" alt="">
+			<h5>{{ data[0] }}</h4>
+			<h6>Duration: {{ data[1] }}</h6>
+		</div></div>
+		<div class="row"><div class="col s12">
+			<table class="centered">
+				<caption><h6>Video Streams</h6></caption>
+				<thead>
+					<tr>
+						<th>MIME Type</th>
+						<th>Resolution</th>
+						<th>Size</th>
+						<th>Link</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for video in data[3] %}
+					<tr>
+						<td>{{video.mime_type}}</td>
+						<td>{{video.resolution}}</td>
+						<td>{{format_size(video.filesize)}}</td>
+						<td><a href="{{video.url}}" target="_blank" rel="noopener noreferrer" download>Download</a></td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+			<div class="row"></div>
+			<div class="row"><div class="col s12">
+			<table class="centered">
+				<caption><h6>Audio Streams</h6></caption>
+				<thead>
+					<tr>
+						<th>MIME Type</th>
+						<th>Bitrate</th>
+						<th>Size</th>
+						<th>Link</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for audio in data[2] %}
+					<tr>
+						<td>{{audio.mime_type}}</td>
+						<td>{{audio.abr}}</td>
+						<td>{{format_size(audio.filesize)}}</td>
+						<td><a href="{{audio.url}}" target="_blank" rel="noopener noreferrer" download>Download</a></td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div></div>
+		{% endif %}
+	</div>
+	<script src="{{ url_for('frame.static', filename='materialize.js') }}" type="text/javascript" charset="utf-8" async defer></script>
+	<script type="text/javascript">
+		
+	</script>
+</body>
+</html>
