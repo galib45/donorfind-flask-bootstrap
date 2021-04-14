@@ -11,8 +11,8 @@ youtube = flask.Blueprint(
 				url_prefix='/youtube'
 			)
 
-@youtube.route('/', methods=['GET', 'POST'])
-def index():
+@youtube.route('/old', methods=['GET', 'POST'])
+def old():
 	if flask.request.method == 'GET':
 		return flask.render_template('youtube-index.html')
 	else:
@@ -70,6 +70,6 @@ def playlistById(id):
 	pl = Playlist(url)
 	return flask.jsonify({'title':pl.title, 'videos':pl.video_urls})
 
-@youtube.route('/js')
-def js():
+@youtube.route('/')
+def index():
 	return flask.render_template('youtube-index.html', js=True)

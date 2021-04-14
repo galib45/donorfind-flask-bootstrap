@@ -35,7 +35,6 @@
     		<div class="col s2 m2">
 				<button class="teal waves-effect waves-light btn" id="get">Get</button>
 			</div>
-			<div class="col s12"><br><br></div>
 			<div class="col s12">
 				<div id="progresstext"></div>
 			</div>
@@ -115,19 +114,19 @@
 		</div></div>
 		{% endif %}
 		{% if js %}
-		<div class="row"><div class="col">
+		<div class="row" id="pl_info"><div class="col">
 			<h5 id="pl_title"></h4>
 			<h6 id="pl_num_videos"></h6>
 		</div></div>
-		<div class="row"><div class="col">
+		<div class="row" id="pl_main"><div class="col">
 			<ul class="collapsible" id="pl_list"></ul>
 		</div></div>
-		<div class="row"><div class="col">
+		<div class="row" id="vid_info"><div class="col">
 			<img id="vid_thumb">
 			<h5 id="vid_title"></h4>
 			<h6 id="vid_duration"></h6>
 		</div></div>
-		<div class="row"><div class="col" id="vid_links">
+		<div class="row" id="vid_main"><div class="col s12" id="vid_links">
 			
 		</div></div>
 		{% endif %}
@@ -139,10 +138,7 @@
 		progressbar = document.getElementById('progressbar');
 		progresswrapper = document.querySelector('.progress');
 		collapsible = document.querySelector('.collapsible');
-		document.addEventListener('DOMContentLoaded', () => {
-			M.Collapsible.init(document.querySelectorAll('.collapsible'));
-		});
-
+		
 		function getLinks(json) {
 			output = '<div class="row"><div class="col s12"> \
 			<table class="centered"> \
@@ -206,7 +202,7 @@
 			collapsible.parentElement.classList.remove('s12');
 			
 			i = 0;
-			progresstext.innerHTML = i + ' videos loaded (0%) ...';
+			progresstext.innerHTML = '<br><br>' + i + ' videos loaded (0%) ...';
 			progressbar.classList.replace('indeterminate', 'determinate');
 			
 			total = json.videos.length;
@@ -222,7 +218,7 @@
 				i++;
 				percentage = i/total*100;
 				percentage = percentage.toPrecision(percentage.toFixed().length + 2)
-				progresstext.innerHTML = i + ' videos loaded (' + percentage + '%) ...';
+				progresstext.innerHTML = '<br><br>' + i + ' videos loaded (' + percentage + '%) ...';
 				progressbar.style.width = percentage + '%';
 			}
 			progresstext.innerHTML = '';
@@ -232,26 +228,40 @@
 		}
 
 		function loadVideo(json) {
+			progresstext.innerHTML = '';
+			progressbar.style.width = '0%';
+			progresswrapper.style.display = 'none';
+
 			vidthumb = document.getElementById('vid_thumb');
 			vidtitle = document.getElementById('vid_title');
 			vidduration = document.getElementById('vid_duration');
 			vidlinks = document.getElementById('vid_links');
 
+			vidthumb.src = json.thumbnail;
 			vidtitle.innerHTML = json.title;
-			vidduration.innerHTML = json.videos.length + ' videos';
+			vidduration.innerHTML = json.duration;
 			vidlinks.innerHTML = getLinks(json);	
 		}
 
 		getbtn = document.getElementById('get');
 		yturl = document.getElementById('yturl');
+		init = 0;
 		getbtn.onclick = function() {
 			url = yturl.value;
+			if (init == 0) {
+				M.Collapsible.init(document.querySelectorAll('.collapsible'));
+				init = 1;
+			}
 			if (url.includes('youtu.be') || url.includes('youtube.com')) {
 				progresswrapper.style.display = 'block';
 				// check if playlist
 				if (url.includes('list=')) {
 					// playlist
-					progresstext.innerHTML = 'Loading playlist...';
+					document.querySelector('#pl_info').style.display = 'block';
+					document.querySelector('#pl_main').style.display = 'block';
+					document.querySelector('#vid_info').style.display = 'none';
+					document.querySelector('#vid_main').style.display = 'none';
+					progresstext.innerHTML = '<br><br>' + 'Loading playlist...';
 					// extract id from url
 					id = url.split('list=')[1].split('&')[0];
 					fetch('/youtube/playlist/' + id)
@@ -259,7 +269,13 @@
 					.then(j => loadPlaylist(j));
 				} else {
 					// video
-					progresstext.innerHTML = 'Loading video...';
+					document.querySelector('#pl_info').style.display = 'none';
+					document.querySelector('#pl_main').style.display = 'none';
+					document.querySelector('#vid_info').style.display = 'block';
+					document.querySelector('#vid_main').style.display = 'block';
+					document.getElementById('pl_list').innerHTML = '';
+					collapsible.parentElement.classList.remove('s12');
+					progresstext.innerHTML = '<br><br>' + 'Loading video...';
 					// extract id from url
 					if (url.includes('youtu.be')) {
 						fragments = url.split('/');
