@@ -19,6 +19,7 @@
 			<div class="col"><h3>YouTube Downloader</h3></div>
 		</div>
 		<div class="row">
+			{% if js==False %}
 			<form method="post" id="form" >
     			<div class="col s9 m10" style="padding-left:none;">
     				<input type="url" class="validate" name="url" id="url" placeholder="YouTube video or playlist link">
@@ -27,6 +28,23 @@
 					<button class="teal waves-effect waves-light btn" type="submit" id="submit">Get</button>
 				</div>
 			</form>
+			{% else %}
+			<div class="col s9 m10" style="padding-left:none;">
+    			<input type="url" class="validate" id="yturl" placeholder="YouTube video or playlist link">
+    		</div>
+    		<div class="col s2 m2">
+				<button class="teal waves-effect waves-light btn" id="get">Get</button>
+			</div>
+			<div class="col s12"><br><br></div>
+			<div class="col s12">
+				<div id="progresstext"></div>
+			</div>
+			<div class="col s12">
+				<div class="progress" style="display:none;">
+					<div class="indeterminate" id="progressbar"></div>
+				</div>
+			</div>
+			{% endif %}
 		</div>
 		{% if data %}
 		<div class="row"><div class="col">
@@ -50,12 +68,13 @@
 					<tr>
 						<td>{{video.mime_type}}</td>
 						<td>{{video.resolution}}</td>
-						<td>{{format_size(video.filesize)}}</td>
+						<td>{{format_size(video.filesize, binary=True)}}</td>
 						<td><a href="{{video.url}}" target="_blank" rel="noopener noreferrer" download>Download</a></td>
 					</tr>
 					{% endfor %}
 				</tbody>
 			</table>
+			</div></div>
 			<div class="row"></div>
 			<div class="row"><div class="col s12">
 			<table class="centered">
@@ -73,7 +92,7 @@
 					<tr>
 						<td>{{audio.mime_type}}</td>
 						<td>{{audio.abr}}</td>
-						<td>{{format_size(audio.filesize)}}</td>
+						<td>{{format_size(audio.filesize, binary=True)}}</td>
 						<td><a href="{{audio.url}}" target="_blank" rel="noopener noreferrer" download>Download</a></td>
 					</tr>
 					{% endfor %}
@@ -95,10 +114,168 @@
 			</ul>
 		</div></div>
 		{% endif %}
+		{% if js %}
+		<div class="row"><div class="col">
+			<h5 id="pl_title"></h4>
+			<h6 id="pl_num_videos"></h6>
+		</div></div>
+		<div class="row"><div class="col">
+			<ul class="collapsible" id="pl_list"></ul>
+		</div></div>
+		<div class="row"><div class="col">
+			<img id="vid_thumb">
+			<h5 id="vid_title"></h4>
+			<h6 id="vid_duration"></h6>
+		</div></div>
+		<div class="row"><div class="col" id="vid_links">
+			
+		</div></div>
+		{% endif %}
 	</div>
 	<script src="{{ url_for('frame.static', filename='materialize.js') }}" type="text/javascript" charset="utf-8" async defer></script>
 	<script type="text/javascript">
+	{% if js %}
+		progresstext = document.getElementById('progresstext');
+		progressbar = document.getElementById('progressbar');
+		progresswrapper = document.querySelector('.progress');
+		collapsible = document.querySelector('.collapsible');
+		document.addEventListener('DOMContentLoaded', () => {
+			M.Collapsible.init(document.querySelectorAll('.collapsible'));
+		});
+
+		function getLinks(json) {
+			output = '<div class="row"><div class="col s12"> \
+			<table class="centered"> \
+				<caption><h6>Video Streams</h6></caption> \
+				<thead> \
+					<tr> \
+						<th>MIME Type</th> \
+						<th>Resolution</th> \
+						<th>Size</th> \
+						<th>Link</th> \
+					</tr> \
+				</thead> \
+				<tbody>';
+
+			for (video of json.videos) {
+				output += '<tr><td>' + video[0] 
+						+ '</td><td>' + video[1]
+						+ '</td><td>' + video[2]
+						+ '</td><td><a href="' + video[3]
+						+ '" target="_blank" rel="noopener noreferrer">'
+						+ 'Download</a></td></tr>';
+			}
+
+			output += '</tbody> \
+			</table></div></div> \
+			<div class="row"></div> \
+			<div class="row"><div class="col s12"> \
+			<table class="centered"> \
+				<caption><h6>Audio Streams</h6></caption> \
+				<thead> \
+					<tr> \
+						<th>MIME Type</th> \
+						<th>Bitrate</th> \
+						<th>Size</th> \
+						<th>Link</th> \
+					</tr> \
+				</thead> \
+				<tbody>';
+
+			for (audio of json.audios) {
+				output += '<tr><td>' + audio[0] 
+						+ '</td><td>' + audio[1]
+						+ '</td><td>' + audio[2]
+						+ '</td><td><a href="' + audio[3]
+						+ '" target="_blank" rel="noopener noreferrer">'
+						+ 'Download</a></td></tr>';
+			}
+
+			output += '</tbody></table></div></div>';
+			return output;
+		}
 		
+		async function loadPlaylist(json) {
+			pltitle = document.getElementById('pl_title');
+			plnumvideos = document.getElementById('pl_num_videos');
+			pllist = document.getElementById('pl_list');
+
+			pltitle.innerHTML = json.title;
+			plnumvideos.innerHTML = json.videos.length + ' videos';
+			pllist.innerHTML = '';
+			collapsible.parentElement.classList.remove('s12');
+			
+			i = 0;
+			progresstext.innerHTML = i + ' videos loaded (0%) ...';
+			progressbar.classList.replace('indeterminate', 'determinate');
+			
+			total = json.videos.length;
+			for (video of json.videos) {
+				response = await fetch('/youtube/video/'+video.split('v=')[1]);
+				json = await response.json();
+				pllist.innerHTML += '<li><div class="collapsible-header">'
+									+ json.title + '</div>'
+									+ '<div class="collapsible-body">'
+									+ getLinks(json)
+									+ '</div></li>';
+				collapsible.parentElement.classList.add('s12');
+				i++;
+				percentage = i/total*100;
+				percentage = percentage.toPrecision(percentage.toFixed().length + 2)
+				progresstext.innerHTML = i + ' videos loaded (' + percentage + '%) ...';
+				progressbar.style.width = percentage + '%';
+			}
+			progresstext.innerHTML = '';
+			progressbar.style.width = '0%';
+			progresswrapper.style.display = 'none';
+			progressbar.classList.replace('determinate', 'indeterminate');			
+		}
+
+		function loadVideo(json) {
+			vidthumb = document.getElementById('vid_thumb');
+			vidtitle = document.getElementById('vid_title');
+			vidduration = document.getElementById('vid_duration');
+			vidlinks = document.getElementById('vid_links');
+
+			vidtitle.innerHTML = json.title;
+			vidduration.innerHTML = json.videos.length + ' videos';
+			vidlinks.innerHTML = getLinks(json);	
+		}
+
+		getbtn = document.getElementById('get');
+		yturl = document.getElementById('yturl');
+		getbtn.onclick = function() {
+			url = yturl.value;
+			if (url.includes('youtu.be') || url.includes('youtube.com')) {
+				progresswrapper.style.display = 'block';
+				// check if playlist
+				if (url.includes('list=')) {
+					// playlist
+					progresstext.innerHTML = 'Loading playlist...';
+					// extract id from url
+					id = url.split('list=')[1].split('&')[0];
+					fetch('/youtube/playlist/' + id)
+					.then(r => r.json())
+					.then(j => loadPlaylist(j));
+				} else {
+					// video
+					progresstext.innerHTML = 'Loading video...';
+					// extract id from url
+					if (url.includes('youtu.be')) {
+						fragments = url.split('/');
+						id = fragments[fragments.length-1];
+					} else {
+						id = url.split('v=')[1].split('&')[0];
+					}
+					fetch('/youtube/video/' + id)
+					.then(r => r.json())
+					.then(j => loadVideo(j));
+				}
+			} else {
+				alert('Enter valid url');
+			}
+		}
+	{% endif %}
 	</script>
 </body>
 </html>
