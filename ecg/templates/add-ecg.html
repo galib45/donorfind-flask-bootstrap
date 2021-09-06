@@ -1,0 +1,75 @@
+{% extends "ecg-base.html" %}
+
+{% block title %}Add ECG{% endblock %}
+
+{% block style %}
+.tags-container {
+	display: flex;
+    flex-wrap: wrap;
+    margin: 20px 0;
+}
+
+.tag {
+	margin: 5px 15px 5px 0;
+}
+
+.tag > span {
+	padding-left: 25px !important;
+	line-height: 20px !important;
+}
+
+.title {
+	text-align: center;
+    font-weight: 700;
+    margin: 20px 0px 40px;
+}
+
+#preview {
+	display: none;
+	width: 100%;
+	height: auto;
+}
+{% endblock %}
+
+{% block content %}
+	<div class="container">
+		<h2 class="title">Add ECG</h2>
+		<div class="row">
+			<img id="preview"/>
+		</div>
+		<form method="POST" enctype="multipart/form-data">
+			<div class="row">
+				<div class="file-field input-field" style="margin-bottom: 0;">
+					<div class="btn">
+		        		<input type="file" id="image" name="image" accept="image/*" >
+		        		<span>Select ECG Image</span>
+		      		</div>
+		      		<div class="file-path-wrapper">
+		        		<input placeholder="Image of ECG Paper" class="file-path validate" type="text" id="file-path">
+		      		</div>
+				</div>
+				<div class="input-field" style="margin-bottom: 0;">
+					<input placeholder="Diagnosis" id="dx" name="dx" type="text">
+					<textarea class="materialize-textarea" placeholder="Explanation" id="expl" name="expl"></textarea>	
+					<textarea class="materialize-textarea" placeholder="Tags" id="tags" name="tags" hidden="true"></textarea>	
+				</div>
+			</div>
+			<div class="row">
+				<div class="tags-container">
+					{% for tag in tags %}
+					<label class="tag">
+        				<input type="checkbox" class="filled-in" onclick="updateTags()" />
+        				<span>{{ tag }}</span>
+      				</label>
+      				{% endfor %}
+				</div>
+			</div>
+				
+			<div class="row">
+				<button class="teal waves-effect waves-light btn" type="submit" id="submit">Upload</button>
+			</div>
+		</form>
+	</div>
+{% endblock %}
+
+{% block script %}{% endblock %}

@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% set active_page = 'search' %}
+
+{% block title %}Search Results{% endblock %}
+
+{% block style %}
+.container {
+	padding: 10px;
+}
+.btn-link {
+	padding: 0;
+	width: 100%;
+}
+
+.btn-link:hover, .btn-link:focus{
+	text-decoration: none;
+	color: #d50000
+}
+{% endblock %}
+
+{% block content %}
+	<div class="container" id="accordion">
+		<center>
+			<h2 class="mb-4">{{ data|length }} Search Result{{ 's' if data|length>1 }} for "{{ qstring }}"</h2>
+		</center>
+		{% for row in data %}
+			<div class="card mx-auto">
+				<div class="card-header p-0" id="h{{ loop.index }}">
+					<button class="btn btn-link text-left px-3 py-2" data-toggle="collapse" data-target="#d{{ loop.index }}" aria-expanded="false" aria-controls="{{ loop.index }}">
+						{{ row.name }}
+					</button>
+				</div>
+				<div class="collapse" id="d{{ loop.index }}" aria-labelledby="h{{ loop.index }}" data-parent="#accordion">
+					<div class="card-body px-3 py-3">
+					<div class="row">
+						<div class="col">
+							Contact No<br>
+							Batch<br>
+							Blood group
+						</div>
+						<div class="col">
+							{{ row.phone }}<br>
+							{{ row.batch }}<br>
+							{{ row.blood_group }}
+						</div>
+					</div>
+					</div>
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+{% endblock %}

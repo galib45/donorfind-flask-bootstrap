@@ -1,0 +1,50 @@
+{% extends "ecg-base.html" %}
+
+{% block title %}ECG Library{% endblock %}
+
+{% block style %}
+.title {
+	text-align: center;
+    font-weight: 700;
+}
+
+.tags-container {
+	padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.tag {
+	background-color: #00ffcb87;
+    padding: 5px 15px;
+    margin: 5px;
+    width: fit-content;
+    border-radius: 20px;
+    font-size: 1.15em;
+    font-weight: 600;
+    color: black;
+}
+
+a.tag:hover {
+	color: blue;
+}
+
+a.tag:visited {
+	color: brown;
+}
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+	<h2 class="title">ECG Library</h2>
+	<div class="tags-container">
+		{% for tag in tags %}
+			<a class="tag" href="/{{ tag.lower()|replace(' ', '-') }}">
+				{{ tag }}
+			</a>
+		{% endfor %}
+	</div>
+</div>
+	
+{% endblock %}

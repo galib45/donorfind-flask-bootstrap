@@ -1,0 +1,24 @@
+{% extends "ecg-base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block style %}
+img {
+	width: 100%;
+	height: auto;
+}
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+	<h2 class="title">Home</h2>
+	{% for ecg in data %}
+	<div class="image-card">
+		<img src="{{ ecg.image_id }}" alt="">
+		{{ ecg.dx }}
+	</div>
+	{% endfor %}
+</div>
+	
+{% endblock %}
