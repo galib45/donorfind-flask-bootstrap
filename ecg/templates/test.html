@@ -1,6 +1,6 @@
 {% extends "ecg-base.html" %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Test {{ code }}{% endblock %}
 
 {% block style %}
 img {
@@ -17,12 +17,11 @@ img {
 {% block content %}
 
 <div class="container">
-	<h2 class="title">Home</h2>
-	<a href="/ecg/create-test/">Take A Test</a>
+	<h2 class="title">Test {{ code }}</h2>
 	{% for ecg in data %}
 	<div class="image-card">
-		<img src="{{ ecg.image_id }}" alt="">
-		{{ ecg.dx }}
+		<img src="{{ ecg[0] }}" alt="">
+		{{ ecg[1] }}
 	</div>
 	{% endfor %}
 </div>

@@ -75,6 +75,34 @@ def index():
 def library():
 	return flask.render_template('ecg-library.html', tags=alltags)
 
+@ecg.route('/create-test', methods=['GET', 'POST'])
+def createTest():
+	if flask.request.method == 'GET':
+		return flask.render_template('create-test.html', tags=alltags)
+	else:
+		# getting data from the form
+		form = flask.request.form
+		code = form['code']
+		return flask.redirect(flask.url_for('.test', code=code))
+
+@ecg.route('/test/<int:code>')
+def test(code):
+	binary_code = bin(code)[2:].zfill(29)
+	indices = [i for i, x in enumerate(binary_code) if x == '1']
+	id_list = []
+	ecg_list = []
+
+	for index in indices:
+		data = ECG.select().where(ECG.tags.contains(alltags[index]))
+		for entry in data:
+			if entry.image_id not in id_list:
+				id_list.append(entry.image_id)
+				ecg_list.append([
+					entry.image_id, entry.dx, 
+					entry.expl, entry.tags
+				])
+	return flask.render_template('test.html', data=ecg_list, code=code)
+
 @ecg.route('/add-ecg', methods=['GET', 'POST'])
 def add_ecg():
 	if flask.request.method == 'GET':

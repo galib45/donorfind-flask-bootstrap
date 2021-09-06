@@ -1,0 +1,55 @@
+{% extends "ecg-base.html" %}
+
+{% block title %}Create Test{% endblock %}
+
+{% block style %}
+.tags-container {
+	display: flex;
+    flex-wrap: wrap;
+    margin: 20px 0;
+}
+
+.tag {
+	margin: 5px 15px 5px 0;
+}
+
+.tag > span {
+	padding-left: 25px !important;
+	line-height: 20px !important;
+}
+
+.title {
+	text-align: center;
+    font-weight: 700;
+    margin: 20px 0px 40px;
+}
+{% endblock %}
+
+{% block content %}
+	<div class="container">
+		<h2 class="title">Create Test</h2>
+		<form method="POST" >
+			<div class="row">
+				<div class="input-field" style="margin-bottom: 0;">
+					<input hidden="true" id="code" name="code" type="text">
+				</div>
+			</div>
+			<div class="row">
+				<div class="tags-container">
+					{% for tag in tags %}
+					<label class="tag">
+        				<input type="checkbox" class="filled-in" onclick="genCode()" />
+        				<span>{{ tag }}</span>
+      				</label>
+      				{% endfor %}
+				</div>
+			</div>
+				
+			<div class="row">
+				<button class="teal waves-effect waves-light btn" type="submit" id="submit">Create</button>
+			</div>
+		</form>
+	</div>
+{% endblock %}
+
+{% block script %}{% endblock %}
