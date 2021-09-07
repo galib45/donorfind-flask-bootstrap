@@ -1,5 +1,6 @@
 import os
 import datetime
+import random
 import operator
 import flask
 from github import Github
@@ -101,6 +102,7 @@ def test(code):
 					entry.image_id, entry.dx, 
 					entry.expl, entry.tags
 				])
+	random.shuffle(ecg_list)
 	return flask.render_template('test.html', data=ecg_list, code=code)
 
 @ecg.route('/add-ecg', methods=['GET', 'POST'])
