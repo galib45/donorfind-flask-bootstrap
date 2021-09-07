@@ -10,11 +10,26 @@
 		{% block style %}{% endblock %}
 	</style>
 	<link rel="stylesheet" type="text/css" href="{{ url_for('ecg.static', filename='materialize.css') }}">
+	<link rel="stylesheet" href="{{ url_for('ecg.static',filename='ecg-styles.css') }}">
 </head>
 <body>
+	<div class='navbar-container'>
+		<div class="nav-head">
+		  <div class="brand">HairyECG</div>
+		  <div id="hamburger">
+			<div></div><div></div><div></div>
+		  </div>
+		</div>
+		<div class='nav-list'>
+		  <ul>
+			<li class='active'>Home</li><li>Library</li><li>Test</li>
+		  </ul>
+		</div>
+	</div>
 	{% block content %}{% endblock %}
 	
 	<script src="{{ url_for('ecg.static', filename='materialize.js') }}" type="text/javascript" charset="utf-8" async defer></script>
+	<script src="{{ url_for('ecg.static', filename='hamburger.js') }}"></script>
 	<script>
 		{% block script %}{% endblock %}
 	</script>
