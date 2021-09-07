@@ -4,82 +4,86 @@
   }
   
   .navbar-container{
-    background:linear-gradient(black, rgb(30,30,30));
-    color:white;
-    font-family:sans-serif;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:1rem;
+    background: #222;
+    color: white;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    display: flex;
+    padding: 1rem;
+    justify-content: space-between;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 2em;
   }
-  
-  .nav-list{
-    display:none;
-  }
-  
-  .nav-head{
-    width:100%;
-    display:flex;
-    justify-content:space-between;
-  }
+
+.nav-list {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 15px 0 5px;
+}
+
+.nav-head {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
   
   .brand{
-    font-weight:bold;
+    font-size: 1.5rem;
+    font-weight: bold;
+    letter-spacing: 1px;
   }
   
-  ul{
-    list-style-type:none;
+  .nav-item {
+    padding: 7px 0;
+    text-transform: uppercase;
+    color: #00d0d0;
+    letter-spacing: 1.5px;
   }
   
-  li{
-    padding:5px;
+  .active {
+    font-weight: bold;
+    color: aqua;
+  }
+
+  .nav-item:hover {
+    color: aqua;
   }
   
-  li.active{
-    font-weight:bold;
-    position:relative;
+  #hamburger {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding: 2px 0;
   }
   
-  li.active::after{
-    content:'';
-    background:white;
-    width:100%;
-    height:3px;
-    position:absolute;
-    top:1.5rem;
-    left:0;
-  }
-  
-  #hamburger{
-    display:flex;
-    flex-direction:column;
-    justify-content:space-around;
-  }
-  
-  #hamburger>*{
-    width:1.4rem;
-    height:2px;
-    background:white;
+  #hamburger > * {
+    width: 2.2em;
+    height: 2px;
+    background: white;
+    border-radius: 2px;
   }
   
   @media screen and (min-width: 700px){
-    .nav-list{
-      width:60%;
-      display:flex;
-      align-items:center;
+    
+    .nav-list {
+      width: 60%;
+      display: flex;
+      align-items: center;
+      flex-direction: row;
+      padding: 0 20px;
     }
-    ul{
-      width:100%;
-      height:100%;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
+
+    .navbar-container{
+      flex-direction: row;
     }
-    li{
-      display:inline;
+
+    .nav-head {
+      padding-left: 20px;
     }
     
-    #hamburger{
+    #hamburger {
       display:none;
     }
   }

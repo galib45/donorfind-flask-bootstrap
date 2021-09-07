@@ -21,9 +21,9 @@
 		  </div>
 		</div>
 		<div class='nav-list'>
-		  <ul>
-			<li class='active'>Home</li><li>Library</li><li>Test</li>
-		  </ul>
+			<a href="/ecg/" class="nav-item {{ 'active' if active_page=='home' else ''}}">Home</a>
+			<a href="/ecg/library" class="nav-item {{ 'active' if active_page=='library' else ''}}">Library</a>
+			<a href="/ecg/create-test" class="nav-item {{ 'active' if active_page=='test' else ''}}">Test</a>
 		</div>
 	</div>
 	{% block content %}{% endblock %}
