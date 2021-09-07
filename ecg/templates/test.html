@@ -29,12 +29,21 @@ img {
     justify-content: space-between;
     margin-bottom: 25px;
 }
+
+.top-ui {
+	display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
 {% endblock %}
 
 {% block content %}
 
 <div class="container">
-	<h2 class="title">Test {{ code }}</h2>
+	<div class="top-ui">
+		<h4 class="title">Test {{ code }}</h4>
+		<span id="ecg-num"></span>
+	</div>
 	<div class="cards">
 		{% for ecg in data %}
 		<div class="image-card">
@@ -58,6 +67,7 @@ current = 0;
 showAnswer = false;
 cards = document.querySelectorAll('.image-card');
 answers = document.querySelectorAll('.answer');
+ecgnum = document.querySelector('#ecg-num');
 nextbtn = document.querySelector('#next');
 prevbtn = document.querySelector('#prev');
 showbtn = document.querySelector('#show');
@@ -86,6 +96,9 @@ function updateNavBtns() {
 	} else {
 		prevbtn.disabled = false;
 	}
+	showAnswer = false;
+	updateAnswerVisibility();
+	ecgnum.innerHTML = current+1 + ' out of ' + cards.length;
 }
 
 updateNavBtns();
@@ -97,8 +110,6 @@ nextbtn.onclick = function() {
 		cards[current].style.display = 'block';
 	}
 	updateNavBtns();
-	showAnswer = false;
-	updateAnswerVisibility();
 };
 
 prevbtn.onclick = function() {
@@ -108,8 +119,6 @@ prevbtn.onclick = function() {
 		cards[current].style.display = 'block';
 	}
 	updateNavBtns();
-	showAnswer = false;
-	updateAnswerVisibility();
 };
 
 showbtn.onclick = function() {
