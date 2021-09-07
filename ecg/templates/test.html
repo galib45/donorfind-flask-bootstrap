@@ -8,9 +8,26 @@ img {
 	height: auto;
 }
 
+.cards {
+	display: flex;
+}
+
 .image-card {
-    margin-bottom: 25px;
+    display: none;
+    margin-bottom: 15px;
     font-size: 1.15em;
+    width: 100%;
+}
+
+.answer {
+	display: none;
+	text-align: center;
+}
+
+.ui {
+	display: flex;
+    justify-content: space-between;
+    margin-bottom: 25px;
 }
 {% endblock %}
 
@@ -18,12 +35,90 @@ img {
 
 <div class="container">
 	<h2 class="title">Test {{ code }}</h2>
-	{% for ecg in data %}
-	<div class="image-card">
-		<img src="{{ ecg[0] }}" alt="">
-		{{ ecg[1] }}
+	<div class="cards">
+		{% for ecg in data %}
+		<div class="image-card">
+			<img src="{{ ecg[0] }}" alt="">
+			<p class="answer">{{ ecg[1] }}</p>
+		</div>
+		{% endfor %}
 	</div>
-	{% endfor %}
+	<div class="ui">
+		<button class="btn" id="prev">Previous</button>
+		<button class="btn" id="show">Show Answer</button>
+		<button class="btn" id="next">Next</button>
+	</div>
 </div>
 	
+{% endblock %}
+
+{% block script %}
+
+current = 0;
+showAnswer = false;
+cards = document.querySelectorAll('.image-card');
+answers = document.querySelectorAll('.answer');
+nextbtn = document.querySelector('#next');
+prevbtn = document.querySelector('#prev');
+showbtn = document.querySelector('#show');
+
+cards[current].style.display = 'block';
+
+function updateAnswerVisibility() {
+	if (showAnswer) {
+		answers[current].style.display = 'block';
+		showbtn.innerHTML = 'Hide Answer';
+	} else {
+		answers[current].style.display = 'none';
+		showbtn.innerHTML = 'Show Answer';
+	}
+}
+
+function updateNavBtns() {
+	if (current == cards.length - 1) {
+		nextbtn.disabled = true;
+	} else {
+		nextbtn.disabled = false;
+	}
+
+	if (current == 0) {
+		prevbtn.disabled = true;
+	} else {
+		prevbtn.disabled = false;
+	}
+}
+
+updateNavBtns();
+
+nextbtn.onclick = function() {
+	if (current < cards.length - 1) {
+		cards[current].style.display = 'none';
+		current++;
+		cards[current].style.display = 'block';
+	}
+	updateNavBtns();
+	showAnswer = false;
+	updateAnswerVisibility();
+};
+
+prevbtn.onclick = function() {
+	if (current > 0) {
+		cards[current].style.display = 'none';
+		current--;
+		cards[current].style.display = 'block';
+	}
+	updateNavBtns();
+	showAnswer = false;
+	updateAnswerVisibility();
+};
+
+showbtn.onclick = function() {
+	if (showAnswer) {
+		showAnswer = false;
+	} else {
+		showAnswer = true;
+	}
+	updateAnswerVisibility();
+}
+
 {% endblock %}

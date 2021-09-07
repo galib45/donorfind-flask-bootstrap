@@ -52,4 +52,24 @@
 	</div>
 {% endblock %}
 
-{% block script %}{% endblock %}
+{% block script %}
+
+function flipSwitch(code, pos) {
+	return code.substr(0, pos) + '1' + code.substr(pos+1);
+}
+
+function genCode() {
+	cbs = document.querySelectorAll('.filled-in');
+	codeShow = document.getElementById('code');
+	code = '00000000000000000000000000000';
+	i = 0;
+	for (cb of cbs) {
+		if (cb.checked) {
+			code = flipSwitch(code, i);
+		}
+		i++;
+	}
+	codeShow.value = parseInt(code, 2);
+}
+
+{% endblock %}
