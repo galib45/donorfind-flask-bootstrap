@@ -33,7 +33,7 @@ alltags = [
 		'Ventricular Ectopic',
 		'Ventricular Tachycardia', 'Ventricular Fibrillation',
 		'Pulmonary Embolism',		
-		'WPW Syndrome', 'LGL Syndrome'
+		'WPW Syndrome', 'LGL Syndrome', 'Idioventricular Rhythm'
 	]
 
 
@@ -81,6 +81,17 @@ def index():
 
 @ecg.route('/library')
 def library():
+	if 'tag' in flask.request.args:
+		tag = flask.request.args['tag']
+		data = ECG.select().where(ECG.tags.contains(tag))
+		ecg_list = []
+		for entry in data:
+			ecg_list.append([
+				entry.image_id, entry.dx, 
+				entry.expl, entry.tags
+			])
+		random.shuffle(ecg_list)
+		return flask.render_template('tag-page.html', tag=tag, data=ecg_list)
 	return flask.render_template('ecg-library.html', tags=alltags)
 
 @ecg.route('/create-test', methods=['GET', 'POST'])
@@ -95,7 +106,7 @@ def createTest():
 
 @ecg.route('/test/<int:code>')
 def test(code):
-	binary_code = bin(code)[2:].zfill(29)
+	binary_code = bin(code)[2:].zfill(30)
 	indices = [i for i, x in enumerate(binary_code) if x == '1']
 	id_list = []
 	ecg_list = []

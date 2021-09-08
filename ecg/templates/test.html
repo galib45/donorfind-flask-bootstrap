@@ -1,4 +1,5 @@
 {% extends "ecg-base.html" %}
+{% set active_page = 'test' %}
 
 {% block title %}Test {{ code }}{% endblock %}
 
@@ -65,69 +66,76 @@ img {
 
 current = 0;
 showAnswer = false;
-cards = document.querySelectorAll('.image-card');
-answers = document.querySelectorAll('.answer');
 ecgnum = document.querySelector('#ecg-num');
-nextbtn = document.querySelector('#next');
-prevbtn = document.querySelector('#prev');
-showbtn = document.querySelector('#show');
+cards = document.querySelectorAll('.image-card');
 
-cards[current].style.display = 'block';
-
-function updateAnswerVisibility() {
-	if (showAnswer) {
-		answers[current].style.display = 'block';
-		showbtn.innerHTML = 'Hide Answer';
-	} else {
-		answers[current].style.display = 'none';
-		showbtn.innerHTML = 'Show Answer';
-	}
+if (cards.length == 0) {
+	ecgnum.innerHTML = 'No ECG found';
+	document.querySelector('.ui').style.display = 'none';
 }
 
-function updateNavBtns() {
-	if (current == cards.length - 1) {
-		nextbtn.disabled = true;
-	} else {
-		nextbtn.disabled = false;
+if (cards.length > 0) {
+	cards[current].style.display = 'block';
+	answers = document.querySelectorAll('.answer');
+	nextbtn = document.querySelector('#next');
+	prevbtn = document.querySelector('#prev');
+	showbtn = document.querySelector('#show');
+
+	function updateAnswerVisibility() {
+		if (showAnswer) {
+			answers[current].style.display = 'block';
+			showbtn.innerHTML = 'Hide Answer';
+		} else {
+			answers[current].style.display = 'none';
+			showbtn.innerHTML = 'Show Answer';
+		}
 	}
 
-	if (current == 0) {
-		prevbtn.disabled = true;
-	} else {
-		prevbtn.disabled = false;
-	}
-	showAnswer = false;
-	updateAnswerVisibility();
-	ecgnum.innerHTML = current+1 + ' out of ' + cards.length;
-}
+	function updateNavBtns() {
+		if (current == cards.length - 1) {
+			nextbtn.disabled = true;
+		} else {
+			nextbtn.disabled = false;
+		}
 
-updateNavBtns();
-
-nextbtn.onclick = function() {
-	if (current < cards.length - 1) {
-		cards[current].style.display = 'none';
-		current++;
-		cards[current].style.display = 'block';
-	}
-	updateNavBtns();
-};
-
-prevbtn.onclick = function() {
-	if (current > 0) {
-		cards[current].style.display = 'none';
-		current--;
-		cards[current].style.display = 'block';
-	}
-	updateNavBtns();
-};
-
-showbtn.onclick = function() {
-	if (showAnswer) {
+		if (current == 0) {
+			prevbtn.disabled = true;
+		} else {
+			prevbtn.disabled = false;
+		}
 		showAnswer = false;
-	} else {
-		showAnswer = true;
+		updateAnswerVisibility();
+		ecgnum.innerHTML = current+1 + ' out of ' + cards.length;
 	}
-	updateAnswerVisibility();
+
+	updateNavBtns();
+
+	nextbtn.onclick = function() {
+		if (current < cards.length - 1) {
+			cards[current].style.display = 'none';
+			current++;
+			cards[current].style.display = 'block';
+		}
+		updateNavBtns();
+	};
+
+	prevbtn.onclick = function() {
+		if (current > 0) {
+			cards[current].style.display = 'none';
+			current--;
+			cards[current].style.display = 'block';
+		}
+		updateNavBtns();
+	};
+
+	showbtn.onclick = function() {
+		if (showAnswer) {
+			showAnswer = false;
+		} else {
+			showAnswer = true;
+		}
+		updateAnswerVisibility();
+	}
 }
 
 {% endblock %}

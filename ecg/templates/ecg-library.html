@@ -42,7 +42,7 @@ a.tag:visited {
 	<h2 class="title">ECG Library</h2>
 	<div class="tags-container">
 		{% for tag in tags %}
-			<a class="tag" href="/{{ tag.lower()|replace(' ', '-') }}">
+			<a class="tag" href="{{ url_for('.library', tag=tag) }}">
 				{{ tag }}
 			</a>
 		{% endfor %}
