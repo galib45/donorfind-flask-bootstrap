@@ -13,15 +13,22 @@ img {
     margin-bottom: 25px;
     font-size: 1.15em;
 }
+
+.title {
+	text-align: center;
+    font-weight: 700;
+    margin: 20px 0px 40px;
+}
 {% endblock %}
 
 {% block content %}
 
 <div class="container">
+	<h2 class="title">All ECGs ({{ data|length }})</h2>
 	{% for ecg in data %}
 	<div class="image-card">
-		<img src="{{ ecg.image_id }}" alt="">
-		{{ ecg.dx }}
+		<img src="{{ ecg[0] }}" alt="">
+		{{ ecg[1] }}
 	</div>
 	{% endfor %}
 </div>

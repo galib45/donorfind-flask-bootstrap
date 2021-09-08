@@ -1,37 +1,37 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<title>{% block title %}{% endblock %} - HairyECG</title>
-	<style>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<title>{% block title %}{% endblock %} - HairyECG</title>
+		<style>
+					
+			{% block style %}{% endblock %}
+		</style>
+		<link rel="stylesheet" type="text/css" href="{{ url_for('ecg.static', filename='materialize.css') }}">
+		<link rel="stylesheet" href="{{ url_for('ecg.static',filename='ecg-styles.css') }}">
+	</head>
+	<body>
+		<div class='navbar-container'>
+			<div class="nav-head">
+				<div class="brand">HairyECG</div>
+				<div id="hamburger">
+					<div></div><div></div><div></div>
+				</div>
+			</div>
+			<div class='nav-list'>
+				<a href="/ecg/" class="nav-item {{ 'active' if active_page=='home' else ''}}">Home</a>
+				<a href="/ecg/library" class="nav-item {{ 'active' if active_page=='library' else ''}}">Library</a>
+				<a href="/ecg/create-test" class="nav-item {{ 'active' if active_page=='test' else ''}}">Test</a>
+			</div>
+		</div>
+		{% block content %}{% endblock %}
 		
-		{% block style %}{% endblock %}
-	</style>
-	<link rel="stylesheet" type="text/css" href="{{ url_for('ecg.static', filename='materialize.css') }}">
-	<link rel="stylesheet" href="{{ url_for('ecg.static',filename='ecg-styles.css') }}">
-</head>
-<body>
-	<div class='navbar-container'>
-		<div class="nav-head">
-		  <div class="brand">HairyECG</div>
-		  <div id="hamburger">
-			<div></div><div></div><div></div>
-		  </div>
-		</div>
-		<div class='nav-list'>
-			<a href="/ecg/" class="nav-item {{ 'active' if active_page=='home' else ''}}">Home</a>
-			<a href="/ecg/library" class="nav-item {{ 'active' if active_page=='library' else ''}}">Library</a>
-			<a href="/ecg/create-test" class="nav-item {{ 'active' if active_page=='test' else ''}}">Test</a>
-		</div>
-	</div>
-	{% block content %}{% endblock %}
-	
-	<script src="{{ url_for('ecg.static', filename='materialize.js') }}" type="text/javascript" charset="utf-8" async defer></script>
-	<script src="{{ url_for('ecg.static', filename='hamburger.js') }}"></script>
-	<script>
-		{% block script %}{% endblock %}
-	</script>
-</body>
+		<script src="{{ url_for('ecg.static', filename='materialize.js') }}" type="text/javascript" charset="utf-8" async defer></script>
+		<script src="{{ url_for('ecg.static', filename='hamburger.js') }}"></script>
+		<script>
+			{% block script %}{% endblock %}
+		</script>
+	</body>
 </html>

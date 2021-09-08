@@ -70,7 +70,14 @@ def updateDatabaseInRepo(commitMessage):
 @ecg.route('/')
 def index():
 	data = ECG.select()
-	return flask.render_template('ecg-index.html', data=data)
+	ecg_list = []
+	for entry in data:
+		ecg_list.append([
+			entry.image_id, entry.dx, 
+			entry.expl, entry.tags
+		])
+	random.shuffle(ecg_list)
+	return flask.render_template('ecg-index.html', data=ecg_list)
 
 @ecg.route('/library')
 def library():
