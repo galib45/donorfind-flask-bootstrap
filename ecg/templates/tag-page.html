@@ -1,0 +1,36 @@
+{% extends "ecg-base.html" %}
+{% set active_page = 'library' %}
+
+{% block title %}{{ tag }}{% endblock %}
+
+{% block style %}
+img {
+	width: 100%;
+	height: auto;
+}
+
+.image-card {
+    margin-bottom: 25px;
+    font-size: 1.15em;
+}
+
+.title {
+	text-align: center;
+    font-weight: 700;
+    margin: 20px 0px 40px;
+}
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+	<h4 class="title">ECGs showing {{ tag }} ({{ data|length }})</h4>
+	{% for ecg in data %}
+	<div class="image-card">
+		<img src="{{ ecg[0] }}" alt="">
+		{{ ecg[1] }}
+	</div>
+	{% endfor %}
+</div>
+	
+{% endblock %}
