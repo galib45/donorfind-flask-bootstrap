@@ -64,6 +64,13 @@
     border-radius: 2px;
 }
 
+@media screen and (min-width:993px) {
+    .navbar-container {
+        padding: 1rem 12%;
+    }
+
+}
+
 @media screen and (min-width:601px) {
     .nav-list {
         width: 60%;
