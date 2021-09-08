@@ -10,7 +10,7 @@ burger.onclick = () => {
 }
 
 window.addEventListener('resize', e => {
-    if (window.innerWidth > 700) {
+    if (window.innerWidth > 601) {
         list.style.display = 'flex';
     } else {
         list.style.display = 'none';
