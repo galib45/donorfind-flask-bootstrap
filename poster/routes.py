@@ -21,8 +21,9 @@ global repo
 
 # initialize the github repository of the database
 token = os.environ.get('github-access-token')
-user = Github(token).get_user()
-repo = user.get_repo('galib-cloud')
+g = Github(token)
+user = g.get_user()
+repo = g.get_repo('galib45/galib-cloud')
 
 @poster.route('/', methods=['GET', 'POST'])
 def create_poster():
