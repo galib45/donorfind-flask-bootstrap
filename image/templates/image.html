@@ -52,9 +52,15 @@
 			        <span>Signature (300x80)</span>
 		      	</label>
 		    </div>
+		    <div class="row">
+			   	<label class="grey-text text-darken-4">
+			        <input type="checkbox" name="removebg"/>
+			        <span>Remove Background</span>
+			    </label>
+		    </div>
 			<!-- <button type="submit" id="upload">Upload</button> -->
 			<div class="row">
-				<a class="waves-effect waves-light btn" type="submit" id="upload">Upload</a>
+				<a class="waves-effect waves-light btn" type="submit" id="upload">START</a>
 			</div>
 		</form>
 		<div class="row"><h6 id="percentage"></h6></div>
@@ -62,7 +68,10 @@
 			<div class="determinate" id="progress"></div>
 		</div>
 		<div><img src="" id="image" style="display: none;"></div>
-		<div><h6 id="description"></h6></div>
+		<div class="row" style="display: flex;align-items: center;justify-content: space-around;">
+			<div><h6 id="description"></h6></div>
+			<div><a id="download" style="display: none;" download>DOWNLOAD</a></div>
+		</div>
 	</div>
 	<script src="{{ url_for('static', filename='materialize.js') }}" type="text/javascript" charset="utf-8" async defer></script>
 	<script src="{{ url_for('image.static', filename='index.js') }}" type="text/javascript" charset="utf-8" async defer></script>

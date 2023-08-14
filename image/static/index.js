@@ -6,6 +6,7 @@ var progressbar = document.querySelector('#progress_bar');
 var progress = document.querySelector('#progress');
 var percentage = document.querySelector('#percentage');
 var description = document.querySelector('#description');
+var download = document.querySelector('#download');
 
 image.addEventListener('load', () => {
 	percentage.innerHTML = '';
@@ -18,17 +19,21 @@ image.addEventListener('load', () => {
         imageSize = Math.round(perf.transferSize / 1024); //or encodedBodySize, decodedBodySize
         description.innerHTML += width.toString() + 'x' + height.toString();
         description.innerHTML += ', ' + imageSize.toString() + 'kB';
+        download.href = url;
+        download.style.display = 'block';
     }
 });
 
 uploadButton.addEventListener('click', function(event) {
 	event.preventDefault();
 	image.style.display = 'none';
+	download.style.display = 'none';
 	description.innerHTML = '';
 	progress.classList.remove("indeterminate");
 	progress.classList.add("determinate");
 
 	var formdata = new FormData(form);
+	if (formdata.has('removebg') == false) formdata.append('removebg', 'off');
 	// fetch('/image/', {
 	// 	method: 'POST',
 	// 	body: formdata

@@ -3,6 +3,7 @@ import flask
 import uuid
 import cv2
 import numpy
+import rembg
 
 # create the blueprint
 image = flask.Blueprint(
@@ -32,12 +33,27 @@ def crop_image(filepath, imagetype):
 	# print(left, top, right, bottom)
 
 	if imagetype == 'photo':
-		if rows == cols: final = img
-		elif rows > cols: final = img[top:top+cols, 0:cols]
-		else: 
-			colstart = cols//2 - (rows - top)//2
-			colend = cols//2 + (rows - top)//2
-			final = img[top:rows, colstart:colend]
+		face_classifier = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
+		face = face_classifier.detectMultiScale(grayscale, scaleFactor=1.1, minNeighbors=5, minSize=(40, 40))
+		x, y, w, h = face[0]
+		face_width = w
+		face_center_x, face_center_y = int(x + w//2), int(y + h//2)
+		# expand horizontally by 150% of the face_width
+		expanded_left = max(0, int(face_center_x - face_width*1.5)) 
+		expanded_right = min(cols, int(face_center_x + face_width*1.5))
+		expanded_width = expanded_right - expanded_left
+		# expand upwards by 1/3 of the face width
+		up_exp = max(0, int(y-face_width//3))
+		expanded_top = 0 if up_exp + expanded_width >= rows else up_exp
+		expanded_bottom = min(up_exp+expanded_width, rows)
+		# if rows == cols: final = img
+		# elif rows > cols: final = img[top:top+cols, 0:cols]
+		# else: 
+		# 	colstart = cols//2 - (rows - top)//2
+		# 	colend = cols//2 + (rows - top)//2
+		# 	final = img[top:rows, colstart:colend]
+		final = img[expanded_top:expanded_bottom, expanded_left:expanded_right]
+		print(final.shape)
 		resize_down = cv2.resize(final, (300, 300), interpolation=cv2.INTER_LINEAR)
 	elif imagetype == 'sign':
 		box_width = right - left
@@ -72,6 +88,7 @@ def index():
 @image.route('/', methods=['POST'])
 def process_image():
 	imagetype = flask.request.form['imagetype']
+	removebg = flask.request.form['removebg']
 	inputFile = flask.request.files['file']
 	if inputFile.filename != '':
 		# save the file with a random name
@@ -80,6 +97,11 @@ def process_image():
 		filename = randomname + extension
 		filepath = 'image/uploads/' + filename
 		inputFile.save(filepath)
+		if removebg == 'on':
+			image = cv2.imread(filepath)
+			session = rembg.new_session('u2netp')
+			output = rembg.remove(image, session=session, bgcolor=(255, 255, 255, 255))
+			cv2.imwrite(filepath, output)
 		crop_image(filepath, imagetype)
 		return filename		
 	return 'Error - no file specified'
