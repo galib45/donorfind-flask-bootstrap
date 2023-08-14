@@ -18,18 +18,21 @@ def extract_num(value):
 
 global repo
 
-# initialize the github repository of the database
-token = os.environ.get('github_access_token')
-g = Github(token)
-user = g.get_user()
-repo = g.get_repo('galib45/galib-cloud')
-database_file = repo.get_contents('database.db')
+environment = os.environ.get('environment')
 
-# download database if not found
-if not os.path.isfile('donorfind/database.db'):
-	file_content = database_file.decoded_content
-	with open('donorfind/database.db', 'wb') as file:
-		file.write(file_content)
+if environment == 'prod' or environment == 'git-dev':
+	# initialize the github repository of the database
+	token = os.environ.get('github_access_token')
+	g = Github(token)
+	user = g.get_user()
+	repo = g.get_repo('galib45/galib-cloud')
+	database_file = repo.get_contents('database.db')
+
+	# download database if not found
+	if not os.path.isfile('donorfind/database.db'):
+		file_content = database_file.decoded_content
+		with open('donorfind/database.db', 'wb') as file:
+			file.write(file_content)
 
 # routing commands
 @donorfind.route('/')

@@ -36,36 +36,38 @@ alltags = [
 		'WPW Syndrome', 'LGL Syndrome', 'Idioventricular Rhythm'
 	]
 
+environment = os.environ.get('environment')
 
-# initialize the github repository of the database
-token = os.environ.get('github_access_token')
-g = Github(token)
-user = g.get_user()
-repo = g.get_repo('galib45/galib-cloud')
+if environment == 'prod' or environment == 'git-dev':
+	# initialize the github repository of the database
+	token = os.environ.get('github_access_token')
+	g = Github(token)
+	user = g.get_user()
+	repo = g.get_repo('galib45/galib-cloud')
 
-try:
-	database_file = repo.get_contents('ecg/database.db')
-except:
-	with open('ecg/database.db', 'rb') as file:
-		contents = file.read()
-		repo.create_file(
-			'ecg/database.db', 
-			'Created database file',
-			contents
-		)
+	try:
+		database_file = repo.get_contents('ecg/database.db')
+	except:
+		with open('ecg/database.db', 'rb') as file:
+			contents = file.read()
+			repo.create_file(
+				'ecg/database.db', 
+				'Created database file',
+				contents
+			)
 
-# download database if not found
-if not os.path.isfile('ecg/database.db'):
-	file_content = database_file.decoded_content
-	with open('ecg/database.db', 'wb') as file:
-		file.write(file_content)
+	# download database if not found
+	if not os.path.isfile('ecg/database.db'):
+		file_content = database_file.decoded_content
+		with open('ecg/database.db', 'wb') as file:
+			file.write(file_content)
 
-def updateDatabaseInRepo(commitMessage):
-	# updating the database on github repo
-	with open('ecg/database.db', 'rb') as file:
-		new_content = file.read()
-	sha_replaced = repo.get_contents('ecg/database.db').sha
-	repo.update_file('ecg/database.db', commitMessage, new_content, sha_replaced)
+	def updateDatabaseInRepo(commitMessage):
+		# updating the database on github repo
+		with open('ecg/database.db', 'rb') as file:
+			new_content = file.read()
+		sha_replaced = repo.get_contents('ecg/database.db').sha
+		repo.update_file('ecg/database.db', commitMessage, new_content, sha_replaced)
 
 # routing commands
 @ecg.route('/')

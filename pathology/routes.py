@@ -38,18 +38,21 @@ def getFileContent(path):
 	else:
 		raise Exception('file not found')
 
-# initialize the github repository of the database
-token = os.environ.get('github_access_token')
-g = Github(token)
-user = g.get_user()
-repo = g.get_repo('galib45/galib-cloud')
-# database_file = repo.get_contents('pathology/database.db')
+environment = os.environ.get('environment')
 
-# download database if not found
-if not os.path.isfile('pathology/database.db'):
-	file_content = getFileContent('pathology/database.db')
-	with open('pathology/database.db', 'wb') as file:
-		file.write(file_content)
+if environment == 'prod' or environment == 'git-dev':
+	# initialize the github repository of the database
+	token = os.environ.get('github_access_token')
+	g = Github(token)
+	user = g.get_user()
+	repo = g.get_repo('galib45/galib-cloud')
+	# database_file = repo.get_contents('pathology/database.db')
+
+	# download database if not found
+	if not os.path.isfile('pathology/database.db'):
+		file_content = getFileContent('pathology/database.db')
+		with open('pathology/database.db', 'wb') as file:
+			file.write(file_content)
 
 def update_repo():
 	# updating the database on github repo

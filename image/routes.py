@@ -26,6 +26,11 @@ def bounding_box(img):
 
 def crop_image(filepath, imagetype):
 	img = cv2.imread(filepath)
+	h, w, _ = img.shape
+	if max(w, h) > 500: 
+		if w == h: img = cv2.resize(img, (500, 500), interpolation=cv2.INTER_AREA)
+		elif w > h: img = cv2.resize(img, (500, int(500/w*h)), interpolation=cv2.INTER_AREA)
+		else: img = cv2.resize(img, (int(500/h*w), 500), interpolation=cv2.INTER_AREA)
 	grayscale = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 	rows, cols = grayscale.shape
 
