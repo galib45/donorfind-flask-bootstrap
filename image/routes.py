@@ -40,22 +40,21 @@ def crop_image(filepath, imagetype):
 			final = img[top:rows, colstart:colend]
 		resize_down = cv2.resize(final, (300, 300), interpolation=cv2.INTER_LINEAR)
 	elif imagetype == 'sign':
-		colstart = max(0, left - 15)
-		colend = min(cols, right + 15)
-		rowstart = max(0, top - 15)
-		rowend = min(rows, right + 15)
 		box_width = right - left
 		box_height = bottom - top
 		recommended_height = box_width/300*80
+		print(box_height, box_width)
 		if box_height <= recommended_height:
 			expansion = recommended_height - box_height
 			rowstart = top - int(expansion//2)
 			rowend = bottom + int(expansion//2)
+			colstart, colend = left, right
 		else:
 			recommended_width = box_height/80*300
 			expansion = recommended_width - box_width
 			colstart = left - int(expansion//2)
 			colend = right + int(expansion//2)
+			rowstart, rowend = top, bottom
 		# print(rowstart, rowend, colstart, colend)
 		final = img[rowstart:rowend, colstart:colend]
 		resize_down = cv2.resize(final, (300, 80), interpolation=cv2.INTER_LINEAR)

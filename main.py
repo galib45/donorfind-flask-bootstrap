@@ -21,4 +21,4 @@ def send_file(path):
 	return flask.send_from_directory('', path)
 
 if __name__=='__main__':
-	app.run(debug=False)
+	app.run(debug=True)
