@@ -1,7 +1,7 @@
 import flask
 
 # create the blueprint
-poster = flask.Blueprint(
+image = flask.Blueprint(
 				'image', 
 				__name__, 
 				template_folder='templates', 
@@ -9,9 +9,14 @@ poster = flask.Blueprint(
 				url_prefix = '/image'
 			)
 
-@poster.route('/', methods=['GET', 'POST'])
-def create_poster():
-	if flask.request.method == 'GET':
-		return flask.render_template('image.html')
-	else:
-		print("POST - not implemented")
+@image.route('/', methods=['GET'])
+def index():
+	return flask.render_template('image.html')
+
+
+@image.route('/', methods=['POST'])
+def process_image():
+	inputFile = flask.request.files['file']
+	if inputFile.filename != '':
+		inputFile.save(inputFile.filename)
+	return flask.redirect(flask.url_for('.index'))
