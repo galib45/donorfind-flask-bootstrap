@@ -20,13 +20,17 @@
 		    background-size:25px 25px; /* Must be a square */
 		    background-position:0 0, 12.5px 0, 12.5px -12.5px, 0px 12.5px; /* Must be half of one side of the square */
 		}
+		#percentage {
+			margin-bottom: 0;
+    		margin-top: 40px;
+		}
 	</style>
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='materialize.css') }}">
 </head>
 
 <body>
 	<div class="container">
-		<div class="row"><h3>Image Processing for Online Form Submission</h3></div>
+		<div class="row"><h4>Image Processing for Online Form Submission</h4></div>
 		<form method="POST" action="" enctype="multipart/form-data">
 			<!-- <p><input type="file" name="file" accept="image/*"></p> -->
 			<div class="file-field input-field">
@@ -53,6 +57,12 @@
 				<a class="waves-effect waves-light btn" type="submit" id="upload">Upload</a>
 			</div>
 		</form>
+		<div class="row"><h6 id="percentage"></h6></div>
+		<div class="progress" id="progress_bar" style="display: none;">
+			<div class="determinate" id="progress"></div>
+		</div>
+		<div><img src="" id="image" style="display: none;"></div>
+		<div><h6 id="description"></h6></div>
 	</div>
 	<script src="{{ url_for('static', filename='materialize.js') }}" type="text/javascript" charset="utf-8" async defer></script>
 	<script src="{{ url_for('image.static', filename='index.js') }}" type="text/javascript" charset="utf-8" async defer></script>
