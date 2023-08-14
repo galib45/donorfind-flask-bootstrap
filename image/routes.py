@@ -32,7 +32,8 @@ def crop_image(filepath, imagetype):
 	# print(left, top, right, bottom)
 
 	if imagetype == 'photo':
-		if rows >= cols: final = img[top:top+cols, 0:cols]
+		if rows == cols: final = img
+		elif rows > cols: final = img[top:top+cols, 0:cols]
 		else: 
 			colstart = cols//2 - (rows - top)//2
 			colend = cols//2 + (rows - top)//2
