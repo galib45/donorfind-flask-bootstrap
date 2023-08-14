@@ -1,4 +1,5 @@
 import flask
+import uuid
 
 # create the blueprint
 image = flask.Blueprint(
@@ -17,6 +18,7 @@ def index():
 @image.route('/', methods=['POST'])
 def process_image():
 	inputFile = flask.request.files['file']
+	randomfilename = uuid.uuid4().hex + '.' + inputFile.filename.split('.')[-1]
 	if inputFile.filename != '':
-		inputFile.save(inputFile.filename)
-	return flask.redirect(flask.url_for('.index'))
+		inputFile.save('image/uploads/' + randomfilename)
+	return randomfilename
